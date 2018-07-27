@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface FlightRequestService {
 
-    public Object sendHttpPostRequest(String url, Map<String, ?> queryParams);
+    public Object sendHttpPostRequest(String url, Map<String, ?> queryParams) throws HttpClientErrorException;
 
     public Object sendHttpGetRequest(String url, Map<String, ?> queryParams);
 

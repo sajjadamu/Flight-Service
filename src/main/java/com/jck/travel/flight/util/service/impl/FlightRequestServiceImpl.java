@@ -27,7 +27,7 @@ public abstract class FlightRequestServiceImpl implements FlightRequestService {
             "HTTP_VIA",
             "REMOTE_ADDR"};
 
-    public Object sendHttpPostRequest(String url, Map<String, ?> queryParams) {
+    public Object sendHttpPostRequest(String url, Map<String, ?> queryParams) throws HttpClientErrorException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new RestTemplate().postForObject(url, new HttpEntity<>(new Gson().toJson(queryParams), headers), String.class);
