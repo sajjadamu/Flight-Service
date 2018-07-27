@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.jck.travel.flight-search</groupId>
-    <artifactId>flight-search</artifactId>
+    <groupId>com.jck.travel.flight-service</groupId>
+    <artifactId>flight-service</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
 
-    <name>flight-search</name>
+    <name>flight-service</name>
     <description>A micro service for flight-search</description>
 
 
