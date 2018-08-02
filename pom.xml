@@ -69,7 +69,7 @@
     </dependencies>
 
     <build>
-        <finalName>jck</finalName>
+        <finalName>flight</finalName>
         <plugins>
             <!-- Package as an executable jar/war -->
             <plugin>
