@@ -1,4 +1,4 @@
-package com.jck.travel.flight.search.model;
+package com.jck.travel.flight.model;
 
 import java.io.Serializable;
 

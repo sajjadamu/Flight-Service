@@ -1,7 +1,7 @@
-package com.jck.travel.flight.search.model;
+package com.jck.travel.flight.model;
 
 
-import com.jck.travel.flight.search.model.airline.Flight;
+import com.jck.travel.flight.model.airline.Flight;
 
 import java.util.LinkedList;
 import java.util.List;

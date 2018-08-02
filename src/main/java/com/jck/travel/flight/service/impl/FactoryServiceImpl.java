@@ -1,9 +1,9 @@
-package com.jck.travel.flight.search.service.impl;
+package com.jck.travel.flight.service.impl;
 
-import com.jck.travel.flight.search.model.Response;
-import com.jck.travel.flight.search.model.co.FilterCo;
-import com.jck.travel.flight.search.service.FactoryService;
-import com.jck.travel.flight.search.service.SessionService;
+import com.jck.travel.flight.model.Response;
+import com.jck.travel.flight.model.co.FilterCo;
+import com.jck.travel.flight.service.FactoryService;
+import com.jck.travel.flight.service.SessionService;
 import com.jck.travel.flight.util.enumeration.ApiTag;
 import com.jck.travel.flight.util.enumeration.DepartTime;
 import com.jck.travel.flight.util.enumeration.Status;

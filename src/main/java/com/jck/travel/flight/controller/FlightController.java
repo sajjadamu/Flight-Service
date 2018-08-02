@@ -1,11 +1,11 @@
-package com.jck.travel.flight.search.controller;
+package com.jck.travel.flight.controller;
 
-import com.jck.travel.flight.search.model.Error;
-import com.jck.travel.flight.search.model.Response;
-import com.jck.travel.flight.search.model.co.FilterCo;
-import com.jck.travel.flight.search.model.co.SearchCo;
-import com.jck.travel.flight.search.service.FactoryService;
-import com.jck.travel.flight.search.service.SerializeService;
+import com.jck.travel.flight.model.Error;
+import com.jck.travel.flight.model.Response;
+import com.jck.travel.flight.model.co.FilterCo;
+import com.jck.travel.flight.model.co.SearchCo;
+import com.jck.travel.flight.service.FactoryService;
+import com.jck.travel.flight.service.SerializeService;
 import com.jck.travel.flight.util.enumeration.ErrorCode;
 import com.jck.travel.flight.util.exception.AuthenticationException;
 import com.jck.travel.flight.util.exception.BadRequestException;

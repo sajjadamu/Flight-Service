@@ -1,7 +1,7 @@
-package com.jck.travel.flight.search.service.impl;
+package com.jck.travel.flight.service.impl;
 
-import com.jck.travel.flight.search.model.Response;
-import com.jck.travel.flight.search.service.SerializeService;
+import com.jck.travel.flight.model.Response;
+import com.jck.travel.flight.service.SerializeService;
 import com.jck.travel.flight.util.enumeration.Status;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

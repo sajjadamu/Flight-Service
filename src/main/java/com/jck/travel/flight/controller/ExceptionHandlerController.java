@@ -1,7 +1,7 @@
-package com.jck.travel.flight.search.controller;
+package com.jck.travel.flight.controller;
 
-import com.jck.travel.flight.search.model.Error;
-import com.jck.travel.flight.search.model.Response;
+import com.jck.travel.flight.model.Error;
+import com.jck.travel.flight.model.Response;
 import com.jck.travel.flight.util.enumeration.ErrorCode;
 import com.jck.travel.flight.util.enumeration.Status;
 import com.jck.travel.flight.util.exception.AuthenticationException;

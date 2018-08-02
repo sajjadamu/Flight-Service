@@ -1,7 +1,7 @@
-package com.jck.travel.flight.search.service;
+package com.jck.travel.flight.service;
 
 
-import com.jck.travel.flight.search.model.Response;
+import com.jck.travel.flight.model.Response;
 import com.jck.travel.flight.util.enumeration.ApiTag;
 
 import java.util.Map;

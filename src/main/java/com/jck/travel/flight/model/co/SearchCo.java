@@ -1,4 +1,4 @@
-package com.jck.travel.flight.search.model.co;
+package com.jck.travel.flight.model.co;
 
 import com.jck.travel.flight.util.enumeration.CabinType;
 import com.jck.travel.flight.util.enumeration.JourneyType;

@@ -1,4 +1,4 @@
-package com.jck.travel.flight.search.model;
+package com.jck.travel.flight.model;
 
 import com.jck.travel.flight.util.enumeration.Status;
 

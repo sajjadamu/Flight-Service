@@ -1,4 +1,4 @@
-package com.jck.travel.flight.search.model.airline;
+package com.jck.travel.flight.model.airline;
 
 
 public class FareBreakDown {
