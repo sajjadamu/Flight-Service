@@ -1,13 +1,8 @@
 package com.jck.travel.flight.search.service.impl;
 
-import com.jck.travel.flight.search.model.Error;
 import com.jck.travel.flight.search.model.Response;
-import com.jck.travel.flight.search.model.co.AuthenticationCo;
 import com.jck.travel.flight.search.model.co.FilterCo;
-import com.jck.travel.flight.search.model.co.SearchCo;
-import com.jck.travel.flight.search.service.AuthenticationService;
 import com.jck.travel.flight.search.service.FactoryService;
-import com.jck.travel.flight.search.service.FlightService;
 import com.jck.travel.flight.search.service.SessionService;
 import com.jck.travel.flight.util.enumeration.ApiTag;
 import com.jck.travel.flight.util.enumeration.DepartTime;
@@ -31,78 +26,7 @@ import java.util.*;
 public class FactoryServiceImpl implements FactoryService {
 
     @Autowired
-    private AuthenticationService authenticationService;
-
-    @Autowired
     private SessionService sessionService;
-
-    @Autowired
-    private FlightService tboFlightService;
-
-    @Autowired
-    private FlightService galileoFlightService;
-
-    @Override
-    public Response bindAuth(List<JSONObject> objects, String oldToken, String token) {
-        Response response = new Response();
-        JSONObject jsonObject = objects.get(0);
-
-        JSONObject errorObj = jsonObject.getJSONObject("Error");
-        if (errorObj.getInt("ErrorCode") == 0) {
-            sessionService.cacheTokens(oldToken, token, String.valueOf(jsonObject.get("TokenId")), ApiTag.TBO);
-            response.setStatus(Status.OK);
-        } else
-            response.setStatus(Status.NOT_ACCEPTABLE);
-
-        response.setTokenId(token);
-        response.setError(com.jck.travel.flight.search.model.Error.setPreDefinedError(errorObj.getInt("ErrorCode"), errorObj.getString("ErrorMessage")));
-
-        return response;
-    }
-
-    @Override
-    public Response bindSearch(List<JSONObject> objects, String oldToken, String token) {
-        JSONObject jsonObject = objects.get(0);
-        JSONObject errorObj = jsonObject.getJSONObject("Error");
-        Response response = new Response();
-
-        response.setTokenId(token);
-        response.setError(Error.setPreDefinedError(errorObj.getInt("ErrorCode"), errorObj.getString("ErrorMessage")));
-
-        JSONObject object = new JSONObject();
-        object.put("destination", jsonObject.getString("Destination"));
-        object.put("origin", jsonObject.getString("Origin"));
-        object.put("results", jsonObject.getJSONArray("Results"));
-        response.setResponse(object.toMap());
-
-        if (errorObj.getInt("ErrorCode") == 0) {
-            sessionService.cacheTokens(oldToken, token, String.valueOf(jsonObject.get("TraceId")), ApiTag.TBO);
-            sessionService.cacheData(token, response);
-            response.setStatus(Status.OK);
-        } else
-            response.setStatus(Status.NOT_ACCEPTABLE);
-
-        return response;
-    }
-
-    @Override
-    public List<JSONObject> getAuthentications(AuthenticationCo params) {
-
-        List<JSONObject> apiResponses = new LinkedList<>();
-        apiResponses.add(authenticationService.authenticate("http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate", params.getTboAuthRequest()));
-        return apiResponses;
-    }
-
-    @Override
-    public List<JSONObject> getSearchAvailabilities(SearchCo searchCo) throws ParseException {
-
-        List<JSONObject> apiResponses = new LinkedList<>();
-
-        searchCo.setTokenId(getCacheToken(searchCo.getTokenId(), ApiTag.TBO));
-        apiResponses.add(tboFlightService.getAvailabilityList("http://api.tektravels.com/BookingEngineService_Air/AirService.svc/rest/Search/", searchCo.getTboRequest()).getJSONObject("Response"));
-
-        return apiResponses;
-    }
 
     @Override
     public Response filterBy_(FilterCo filterCo, Response dataForFilter) throws JSONException, ParseException {
@@ -165,16 +89,15 @@ public class FactoryServiceImpl implements FactoryService {
 
     @Override
     public String verifyAuth(String token) throws HttpClientErrorException {
-        if (tboFlightService.isAuthenticated(token))
+        /*if (tboFlightService.isAuthenticated(token))
             return UUID.randomUUID().toString();
         else
-            return null;
+            return null;*/
+        return null;
     }
 
     private String getCacheToken(@NotNull String cacheTokenKey, ApiTag tag) {
         Map<String, ?> tokens = sessionService.getApiTokens(cacheTokenKey);
         return String.valueOf(tokens.get(tag.getTag()));
     }
-
-
 }

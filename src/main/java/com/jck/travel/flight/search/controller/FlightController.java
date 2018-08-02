@@ -2,7 +2,6 @@ package com.jck.travel.flight.search.controller;
 
 import com.jck.travel.flight.search.model.Error;
 import com.jck.travel.flight.search.model.Response;
-import com.jck.travel.flight.search.model.co.AuthenticationCo;
 import com.jck.travel.flight.search.model.co.FilterCo;
 import com.jck.travel.flight.search.model.co.SearchCo;
 import com.jck.travel.flight.search.service.FactoryService;
@@ -11,8 +10,6 @@ import com.jck.travel.flight.util.enumeration.ErrorCode;
 import com.jck.travel.flight.util.exception.AuthenticationException;
 import com.jck.travel.flight.util.exception.BadRequestException;
 import com.jck.travel.flight.util.exception.SearchAlreadyExistException;
-import com.jck.travel.flight.util.service.impl.FlightRequestServiceImpl;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -29,29 +26,16 @@ import java.text.ParseException;
 public class FlightController {
 
     @Autowired
-    private FactoryService dataBindingService;
+    private FactoryService factoryService;
 
     @Autowired
     private SerializeService serializeService;
 
-    @RequestMapping(value = "/auth", method = RequestMethod.POST, consumes = "application/json")
-    public Response authentication(@Valid @RequestBody AuthenticationCo authenticationCo, HttpServletRequest request) throws JSONException, AuthenticationException {
-        authenticationCo.setUserIp(FlightRequestServiceImpl.getClientIpAddress(request));
-
-        String token = dataBindingService.verifyAuth(authenticationCo.getTokenId());
-        if (token == null) {
-            request.setAttribute("errorResponse", Error.setErrorResponse(null, ErrorCode.UNAUTHORIZED.getCode(), "Authentication Fail."));
-            throw new AuthenticationException("Authentication Fail.");
-        }
-
-        return dataBindingService.bindAuth(dataBindingService.getAuthentications(authenticationCo), authenticationCo.getTokenId(), token);
-    }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST, consumes = "application/json")
     public Response search(@RequestBody @Valid SearchCo searchCo, BindingResult bindingResult, HttpServletRequest request) throws IOException, NoSuchAlgorithmException, ParseException, AuthenticationException, BadRequestException {
-        searchCo.setUserIp(FlightRequestServiceImpl.getClientIpAddress(request));
 
-        String token = dataBindingService.verifyToken(searchCo.getTokenId());
+        String token = factoryService.verifyToken(searchCo.getTokenId());
         if (token == null) {
             request.setAttribute("errorResponse", Error.setErrorResponse(searchCo.getTokenId(), ErrorCode.NOT_ACCEPTABLE.getCode(), "Invalid Token, Authentication Fail."));
             throw new AuthenticationException("Authentication Fail.");
@@ -67,7 +51,7 @@ public class FlightController {
             throw new BadRequestException("Bad Request. Passenger Count fail");
         }
 
-        return dataBindingService.bindSearch(dataBindingService.getSearchAvailabilities(searchCo), searchCo.getTokenId(), token);
+        return new Response();
     }
 
     @RequestMapping(value = "/filter/price", method = RequestMethod.GET, consumes = "application/json")
@@ -75,7 +59,7 @@ public class FlightController {
         verify(filterCo.getTokenId(), request);
 
         filterCo.setDefaultFilters();
-        return dataBindingService.filterBy_(filterCo, dataBindingService.getCacheData(filterCo.getTokenId()));
+        return factoryService.filterBy_(filterCo, factoryService.getCacheData(filterCo.getTokenId()));
     }
 
     @RequestMapping(value = "/filter/depart_time", method = RequestMethod.GET, consumes = "application/json")
@@ -83,7 +67,7 @@ public class FlightController {
         verify(filterCo.getTokenId(), request);
 
         filterCo.setDefaultFilters();
-        return dataBindingService.filterBy_(filterCo, dataBindingService.getCacheData(filterCo.getTokenId()));
+        return factoryService.filterBy_(filterCo, factoryService.getCacheData(filterCo.getTokenId()));
     }
 
     @RequestMapping(value = "/filter/fare_type", method = RequestMethod.GET, consumes = "application/json")
@@ -91,7 +75,7 @@ public class FlightController {
         verify(filterCo.getTokenId(), request);
 
         filterCo.setDefaultFilters();
-        return dataBindingService.filterBy_(filterCo, dataBindingService.getCacheData(filterCo.getTokenId()));
+        return factoryService.filterBy_(filterCo, factoryService.getCacheData(filterCo.getTokenId()));
     }
 
     @RequestMapping(value = "/filter/airline", method = RequestMethod.GET, consumes = "application/json")
@@ -99,7 +83,7 @@ public class FlightController {
         verify(filterCo.getTokenId(), request);
 
         filterCo.setDefaultFilters();
-        return dataBindingService.filterBy_(filterCo, dataBindingService.getCacheData(filterCo.getTokenId()));
+        return factoryService.filterBy_(filterCo, factoryService.getCacheData(filterCo.getTokenId()));
     }
 
     @RequestMapping(value = "/save_search/{key}/{username}/{token}", method = RequestMethod.GET, consumes = "application/json")
@@ -109,7 +93,7 @@ public class FlightController {
 
             if (!serializeService.isExist(searchKey, username)) {
 
-                Response response = dataBindingService.getCacheData(token);
+                Response response = factoryService.getCacheData(token);
                 serializeService.save(response, searchKey, username);
                 return serializeService.getAllSearchKeys(username);
             } else {
@@ -127,7 +111,7 @@ public class FlightController {
     }
 
     private String verify(String tokenId, HttpServletRequest request) throws AuthenticationException {
-        String token = dataBindingService.verifyToken(tokenId);
+        String token = factoryService.verifyToken(tokenId);
         if (token == null) {
             request.setAttribute("errorResponse", Error.setErrorResponse(null, ErrorCode.UNAUTHORIZED.getCode(), "Authentication Fail."));
             throw new AuthenticationException("Authentication Fail.");
