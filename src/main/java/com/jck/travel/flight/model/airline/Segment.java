@@ -9,10 +9,6 @@ public class Segment {
 
     private String id;
 
-    private String tripIndicator;
-
-    private String segmentIndicator;
-
     private String departureTime;
 
     private String arrivalTime;
@@ -21,23 +17,29 @@ public class Segment {
 
     private BigInteger distance;
 
+    private String fareClass;
+
     private boolean linkAvailability;
 
     private String origin;
 
     private String destination;
 
-    private String equipment;
+    private String equipment; // craft in TBO
 
-    private String availabilitySource;
+    private String availabilitySource;  // Need to get More Info
 
-    private String polledAvailabilityOption;
+    private String tripIndicator;
+
+    private String segmentIndicator;
 
     private String flightNumber;
 
     private BigInteger flightTime;
 
     private String carrier;
+
+    private String polledAvailabilityOption; // Need to get More Info
 
     private String participantLevel;
 
@@ -80,165 +82,5 @@ public class Segment {
         this.flightTime = BigInteger.valueOf(Long.valueOf(segment.get("flightTime").toString()));
         this.availabilityDisplayType = segment.get("availabilityDisplayType").toString();
         this.group = Integer.parseInt(segment.get("group").toString());
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getDepartureTime() {
-        return departureTime;
-    }
-
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
-    }
-
-    public String getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
-
-    public String geteTicketAbility() {
-        return eTicketAbility;
-    }
-
-    public void seteTicketAbility(String eTicketAbility) {
-        this.eTicketAbility = eTicketAbility;
-    }
-
-    public BigInteger getDistance() {
-        return distance;
-    }
-
-    public void setDistance(BigInteger distance) {
-        this.distance = distance;
-    }
-
-    public boolean isLinkAvailability() {
-        return linkAvailability;
-    }
-
-    public void setLinkAvailability(boolean linkAvailability) {
-        this.linkAvailability = linkAvailability;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
-    public String getEquipment() {
-        return equipment;
-    }
-
-    public void setEquipment(String equipment) {
-        this.equipment = equipment;
-    }
-
-    public String getAvailabilitySource() {
-        return availabilitySource;
-    }
-
-    public void setAvailabilitySource(String availabilitySource) {
-        this.availabilitySource = availabilitySource;
-    }
-
-    public String getPolledAvailabilityOption() {
-        return polledAvailabilityOption;
-    }
-
-    public void setPolledAvailabilityOption(String polledAvailabilityOption) {
-        this.polledAvailabilityOption = polledAvailabilityOption;
-    }
-
-    public String getFlightNumber() {
-        return flightNumber;
-    }
-
-    public void setFlightNumber(String flightNumber) {
-        this.flightNumber = flightNumber;
-    }
-
-    public BigInteger getFlightTime() {
-        return flightTime;
-    }
-
-    public void setFlightTime(BigInteger flightTime) {
-        this.flightTime = flightTime;
-    }
-
-    public String getCarrier() {
-        return carrier;
-    }
-
-    public void setCarrier(String carrier) {
-        this.carrier = carrier;
-    }
-
-    public String getParticipantLevel() {
-        return participantLevel;
-    }
-
-    public void setParticipantLevel(String participantLevel) {
-        this.participantLevel = participantLevel;
-    }
-
-    public boolean getChangeOfPlane() {
-        return changeOfPlane;
-    }
-
-    public void setChangeOfPlane(boolean changeOfPlane) {
-        this.changeOfPlane = changeOfPlane;
-    }
-
-    public boolean isOptionalServicesIndicator() {
-        return optionalServicesIndicator;
-    }
-
-    public void setOptionalServicesIndicator(boolean optionalServicesIndicator) {
-        this.optionalServicesIndicator = optionalServicesIndicator;
-    }
-
-    public String getAvailabilityDisplayType() {
-        return availabilityDisplayType;
-    }
-
-    public void setAvailabilityDisplayType(String availabilityDisplayType) {
-        this.availabilityDisplayType = availabilityDisplayType;
-    }
-
-    public int getGroup() {
-        return group;
-    }
-
-    public void setGroup(int group) {
-        this.group = group;
-    }
-
-    public List<String> getAirProviders() {
-        return airProviders;
-    }
-
-    public void setAirProviders(List<String> airProviders) {
-        this.airProviders = airProviders;
     }
 }

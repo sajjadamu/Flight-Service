@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jck.travel.flight.util.enumeration.FlightSource;
 import com.jck.travel.flight.util.enumeration.SourcePriority;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,12 @@ public class Flight {
     private boolean isGSTAllowed;
 
     private boolean isLCC;
+
+    private BigInteger travelTime;
+
+    private String originTerminal; // for galileo
+
+    private String destinationTerminal; // for galileo
 
     private String airLineCode;
 

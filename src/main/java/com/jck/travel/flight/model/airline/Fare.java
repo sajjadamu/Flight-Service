@@ -1,50 +1,45 @@
 package com.jck.travel.flight.model.airline;
 
 
-import java.util.List;
 import java.util.Map;
 
 public class Fare {
 
     private String id;
 
-    private String amount;
-
-    private Map<String, ?> notValidBefore;
+    private String fareCalculator; // For Galileo
 
     private Map<String, ?> baggageAllowance;
 
-    private String origin;
+    private String totalFare;
 
-    private String passengerTypeCode;
+    private String baseFare;
 
-    private String destination;
+    private String totalTaxes;
 
-    private boolean negotiatedFare;
+    private String lastTicketingTime;
 
-    private String fareBasis;
+    private String pricingMethod;
 
-    private Map<String, ?> notValidAfter;
+    private String platingCarrier;
 
-    private Map<String, ?> departureDate;
+    private Map<String, ?> baggageAllowances;
 
-    private String effectiveDate;
+    private FareBreakDown fareBreakDown;
 
-    private Map<String, ?> fareRuleKey;
+    //private boolean negotiatedFare;
 
-    // Air Pricing Solution Object
-    private String approximateTotalPrice;
+    //private String fareBasis;
 
-    private String totalPrice;
 
-    private String approximateBasePrice;
+    // private String effectiveDate;
 
-    private String approximateTaxes;
+    //private Map<String, ?> fareRuleKey;
 
-    private String taxes;
 
-    //airPricingInfo object
-    private List<Map<String, ?>> fareBreakDown;
+    //private String approximateBasePrice;
 
-    private String basePrice;
+    //private String approximateTaxes;
+
+    // private String taxes;
 }
