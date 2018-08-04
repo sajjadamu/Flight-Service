@@ -2,6 +2,7 @@ package com.jck.travel.flight.model;
 
 import com.jck.travel.flight.util.enumeration.Status;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,21 @@ public class Response implements Serializable {
         response.setError(new Error());
         response.setTokenId(tokenId);
         response.setResponse(responseObj);
+        return response;
+    }
+
+    public static Response setErrorResponse(String tokenId, @NotNull Error error) {
+        Response response = new Response();
+        response.setTokenId(tokenId);
+        response.setError(error);
+        return response;
+    }
+
+    public static Response setErrorResponse(Status status, String tokenId, @NotNull Error error) {
+        Response response = new Response();
+        response.setStatus(status);
+        response.setTokenId(tokenId);
+        response.setError(error);
         return response;
     }
 }

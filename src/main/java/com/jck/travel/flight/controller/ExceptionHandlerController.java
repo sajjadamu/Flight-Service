@@ -6,6 +6,7 @@ import com.jck.travel.flight.util.enumeration.ErrorCode;
 import com.jck.travel.flight.util.enumeration.Status;
 import com.jck.travel.flight.util.exception.AuthenticationException;
 import com.jck.travel.flight.util.exception.BadRequestException;
+import com.jck.travel.flight.util.exception.JSONResponseNotFoundException;
 import com.jck.travel.flight.util.exception.SearchAlreadyExistException;
 import org.json.JSONException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.ParseException;
 
 @CrossOrigin
 @ControllerAdvice
@@ -58,6 +60,20 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ResponseBody
     public Response IOException(HttpServletRequest request) {
         System.out.println("========IOException=============");
+        return new Response();
+    }
+
+    @ExceptionHandler(ParseException.class)
+    @ResponseBody
+    public Response parseException(HttpServletRequest request) {
+        System.out.println("========date parse flow=============");
+        return new Response();
+    }
+
+    @ExceptionHandler(JSONResponseNotFoundException.class)
+    @ResponseBody
+    public Response jsonResponseNotFoundException(HttpServletRequest request) {
+        System.out.println("========JSON Response Not Found Exception=============");
         return new Response();
     }
 

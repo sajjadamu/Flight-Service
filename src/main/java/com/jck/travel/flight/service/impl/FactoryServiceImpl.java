@@ -1,32 +1,53 @@
 package com.jck.travel.flight.service.impl;
 
+import com.jck.travel.flight.config.ApplicationConfig;
 import com.jck.travel.flight.model.Response;
 import com.jck.travel.flight.model.co.FilterCo;
+import com.jck.travel.flight.model.co.SearchCo;
+import com.jck.travel.flight.model.dto.util.ModelBindingUtil;
 import com.jck.travel.flight.service.FactoryService;
+import com.jck.travel.flight.service.RestService;
 import com.jck.travel.flight.service.SessionService;
 import com.jck.travel.flight.util.enumeration.ApiTag;
 import com.jck.travel.flight.util.enumeration.DepartTime;
 import com.jck.travel.flight.util.enumeration.Status;
+import com.jck.travel.flight.util.exception.JSONResponseNotFoundException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.context.WebApplicationContext;
 
 import javax.validation.constraints.NotNull;
 import java.text.ParseException;
 import java.util.*;
 
-@Service("dataBindingService")
-@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class FactoryServiceImpl implements FactoryService {
+@Service("factoryService")
+public class FactoryServiceImpl extends ModelBindingUtil implements FactoryService {
+
+    @Autowired
+    private RestService restService;
 
     @Autowired
     private SessionService sessionService;
+
+    @Autowired
+    private ApplicationConfig config;
+
+    @Override
+    public Response getSearch(SearchCo searchCo) throws ParseException, JSONResponseNotFoundException {
+        restService.setResponse(restService.sendPostRequest(config.getTboSearchPath(), searchCo.getTboServiceRequest()));
+
+        if (restService.getHttpStatus().equals(Status.OK)) {
+            JSONObject jsonResponse = restService.getResponse();
+            super.makeJavaMap(jsonResponse);
+            //responseService.getSearch(null);
+            return Response.setSuccessResponse(Status.OK, null, jsonResponse.toMap());
+        } else {
+            return Response.setErrorResponse(restService.getHttpStatus(), null, restService.getError());
+        }
+    }
 
     @Override
     public Response filterBy_(FilterCo filterCo, Response dataForFilter) throws JSONException, ParseException {

@@ -1,5 +1,7 @@
 package com.jck.travel.flight.util.enumeration;
 
+import javax.validation.constraints.NotNull;
+
 public enum Status {
     OK(200),
     NOT_ACCEPTABLE(406),
@@ -28,5 +30,9 @@ public enum Status {
             return Status.BAD_REQUEST;
         else
             throw new IllegalAccessError("Status not found in Status Enum");
+    }
+
+    public boolean equals(@NotNull Status status) {
+        return (status.getCode() == this.getCode());
     }
 }

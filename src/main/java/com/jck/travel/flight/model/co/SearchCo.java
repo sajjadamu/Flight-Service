@@ -1,8 +1,5 @@
 package com.jck.travel.flight.model.co;
 
-import com.jck.travel.flight.util.enumeration.CabinType;
-import com.jck.travel.flight.util.enumeration.JourneyType;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.text.ParseException;
@@ -151,21 +148,14 @@ public class SearchCo {
         return (segments.size() >= 1);
     }
 
-    public Map<String, ?> getTboRequest() throws ParseException {
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("EndUserIp", this.userIp);
-        params.put("TokenId", this.tokenId);
-        params.put("IsDomestic", this.isDomestic);
-        params.put("AdultCount", this.adultCount);
-        params.put("ChildCount", this.childCount);
-        params.put("InfantCount", this.infantCount);
-        params.put("DirectFlight", this.directFlight);
-        params.put("OneStopFlight", this.oneStopFlight);
-        params.put("JourneyType", JourneyType.valueOf(this.journeyType).getTypeNo());
-        params.put("PreferredAirlines", this.preferredAirlines);
-        params.put("Segments", this.getValidSegments());
-        params.put("Sources", this.sources);
-        return params;
+    public Map<String, ?> getTboServiceRequest() throws ParseException {
+        Map<String, Object> tboMap = this.toMap();
+        tboMap.put("tokenId", this.tokenId);
+        return tboMap;
+    }
+
+    public Map<String, ?> getGalileoServiceRequest() throws ParseException {
+        return new LinkedHashMap<>();
     }
 
     private List<Map<String, ?>> getValidSegments() throws ParseException {
@@ -177,16 +167,32 @@ public class SearchCo {
             if (keys.contains("origin") && keys.contains("destination") && keys.contains("flightCabinClass") && keys.contains("preferredArrivalTime")) {
                 if ((co.get("origin") != null && !co.get("origin").toString().isEmpty()) && (co.get("destination") != null && !co.get("destination").toString().isEmpty()) && (co.get("flightCabinClass") != null && !co.get("flightCabinClass").toString().isEmpty()) && (co.get("preferredArrivalTime") != null && !co.get("preferredArrivalTime").toString().isEmpty()) && (co.get("preferredDepartureTime") != null && !co.get("preferredDepartureTime").toString().isEmpty())) {
                     Map<String, Object> segmentsObj = new HashMap<>();
-                    segmentsObj.put("Origin", co.get("origin"));
-                    segmentsObj.put("Destination", co.get("destination"));
-                    segmentsObj.put("FlightCabinClass", CabinType.valueOf(co.get("flightCabinClass").toString()).getTypeNo());
-                    segmentsObj.put("PreferredArrivalTime", parseTboDate(Long.valueOf(co.get("preferredArrivalTime").toString())));
-                    segmentsObj.put("PreferredDepartureTime", parseTboDate(Long.valueOf(co.get("preferredDepartureTime").toString())));
+                    segmentsObj.put("origin", co.get("origin"));
+                    segmentsObj.put("destination", co.get("destination"));
+                    segmentsObj.put("flightCabinClass", co.get("flightCabinClass").toString());
+                    segmentsObj.put("preferredArrivalTime", parseTboDate(Long.valueOf(co.get("preferredArrivalTime").toString())));
+                    segmentsObj.put("preferredDepartureTime", parseTboDate(Long.valueOf(co.get("preferredDepartureTime").toString())));
                     segmentObjList.add(segmentsObj);
                 }
             }
         }
         return segmentObjList;
+    }
+
+    public Map<String, Object> toMap() throws ParseException {
+        Map<String, Object> params = new LinkedHashMap<>();
+        params.put("endUserIp", this.userIp);
+        params.put("isDomestic", this.isDomestic);
+        params.put("adultCount", this.adultCount);
+        params.put("childCount", this.childCount);
+        params.put("infantCount", this.infantCount);
+        params.put("directFlight", this.directFlight);
+        params.put("oneStopFlight", this.oneStopFlight);
+        params.put("journeyType", this.journeyType);
+        params.put("preferredAirlines", this.preferredAirlines);
+        params.put("segments", this.getValidSegments());
+        params.put("sources", this.sources);
+        return params;
     }
 
     private String parseTboDate(Long time) throws ParseException {

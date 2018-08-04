@@ -6,9 +6,11 @@ import com.jck.travel.flight.model.co.FilterCo;
 import com.jck.travel.flight.model.co.SearchCo;
 import com.jck.travel.flight.service.FactoryService;
 import com.jck.travel.flight.service.SerializeService;
+import com.jck.travel.flight.service.impl.AbstractRequestUtil;
 import com.jck.travel.flight.util.enumeration.ErrorCode;
 import com.jck.travel.flight.util.exception.AuthenticationException;
 import com.jck.travel.flight.util.exception.BadRequestException;
+import com.jck.travel.flight.util.exception.JSONResponseNotFoundException;
 import com.jck.travel.flight.util.exception.SearchAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -33,13 +35,8 @@ public class FlightController {
 
 
     @RequestMapping(value = "/search", method = RequestMethod.POST, consumes = "application/json")
-    public Response search(@RequestBody @Valid SearchCo searchCo, BindingResult bindingResult, HttpServletRequest request) throws IOException, NoSuchAlgorithmException, ParseException, AuthenticationException, BadRequestException {
-
-        String token = factoryService.verifyToken(searchCo.getTokenId());
-        if (token == null) {
-            request.setAttribute("errorResponse", Error.setErrorResponse(searchCo.getTokenId(), ErrorCode.NOT_ACCEPTABLE.getCode(), "Invalid Token, Authentication Fail."));
-            throw new AuthenticationException("Authentication Fail.");
-        }
+    public Response search(@RequestBody @Valid SearchCo searchCo, BindingResult bindingResult, HttpServletRequest request) throws IOException, NoSuchAlgorithmException, ParseException, AuthenticationException, BadRequestException, JSONResponseNotFoundException {
+        searchCo.setUserIp(AbstractRequestUtil.getClientIpAddress(request));
 
         if (bindingResult.hasErrors() && !searchCo.validateSegments()) {
             request.setAttribute("errorResponse", Error.setErrorResponse(searchCo.getTokenId(), ErrorCode.BAD_REQUEST.getCode(), "Bad Request"));
@@ -51,7 +48,7 @@ public class FlightController {
             throw new BadRequestException("Bad Request. Passenger Count fail");
         }
 
-        return new Response();
+        return factoryService.getSearch(searchCo);
     }
 
     @RequestMapping(value = "/filter/price", method = RequestMethod.GET, consumes = "application/json")
