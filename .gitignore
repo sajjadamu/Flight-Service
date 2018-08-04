@@ -39,5 +39,6 @@
 .classpath
 .project
 .idea
-flight-search.iml
+flight-service.iml
 /out
+/target

@@ -1,7 +1,9 @@
 package com.jck.travel.flight;
 
 
+import com.jck.travel.flight.config.PersistenceUnit;
 import com.jck.travel.flight.util.component.DataBinding;
+import org.hibernate.SessionFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -19,6 +21,10 @@ public class Application extends SpringBootServletInitializer {
         DataBinding bind = new DataBinding();
         bind.loadProperties();
         return bind;
+    }
+    @Bean
+    public SessionFactory getSessionFactory() throws IOException {
+        return new PersistenceUnit().getSessionFactory();
     }
 
     public static void main(String[] args) {
