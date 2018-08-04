@@ -14,6 +14,8 @@ public interface AuthenticationService {
 
     public boolean isAuthorised(String username, String token) throws AuthenticationException;
 
+    public boolean isAuthorised(String token) throws AuthenticationException;
+
     public boolean isAuthorised(HttpServletRequest request) throws AuthenticationException;
 
     public Map<String, String> getUserCredentials(HttpServletRequest request) throws AuthenticationException;

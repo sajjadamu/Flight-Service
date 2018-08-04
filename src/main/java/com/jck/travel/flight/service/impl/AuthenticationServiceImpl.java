@@ -32,6 +32,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    public boolean isAuthorised(String token) throws AuthenticationException {
+        return true;
+    }
+
+    @Override
     public boolean isAuthorised(HttpServletRequest request) throws AuthenticationException {
         return checkAuthorization(getUserCredentials(request).get("username"), getUserCredentials(request).get("token"));
     }
