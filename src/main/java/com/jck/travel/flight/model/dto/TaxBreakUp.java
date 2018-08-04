@@ -1,4 +1,4 @@
-package com.jck.travel.flight.model.airline;
+package com.jck.travel.flight.model.dto;
 
 
 public class TaxBreakUp {

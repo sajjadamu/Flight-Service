@@ -1,7 +1,9 @@
-package com.jck.travel.flight.model.airline;
+package com.jck.travel.flight.model.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jck.travel.flight.model.dto.util.Searchable;
+import com.jck.travel.flight.model.dto.util.Sortable;
 import com.jck.travel.flight.util.enumeration.FlightSource;
 import com.jck.travel.flight.util.enumeration.SourcePriority;
 
@@ -9,7 +11,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Flight {
+public class Flight implements Sortable<Flight>, Searchable<Flight> {
 
     private String id;
 
@@ -180,5 +182,20 @@ public class Flight {
 
     public void setFareBreakDowns(List<FareBreakDown> fareBreakDowns) {
         this.fareBreakDowns = fareBreakDowns;
+    }
+
+    @Override
+    public int compareTo(Flight object) {
+        return 0;
+    }
+
+    @Override
+    public int compare(Flight object1, Flight object2) {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return false;
     }
 }

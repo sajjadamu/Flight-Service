@@ -1,7 +1,5 @@
-package com.jck.travel.flight.model;
+package com.jck.travel.flight.model.dto;
 
-
-import com.jck.travel.flight.model.airline.Flight;
 
 import java.util.LinkedList;
 import java.util.List;

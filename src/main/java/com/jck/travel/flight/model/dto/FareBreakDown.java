@@ -1,4 +1,4 @@
-package com.jck.travel.flight.model.airline;
+package com.jck.travel.flight.model.dto;
 
 
 import com.jck.travel.flight.util.enumeration.PaxType;
