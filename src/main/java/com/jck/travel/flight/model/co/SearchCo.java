@@ -10,8 +10,6 @@ public class SearchCo {
 
     private String userIp;
 
-    @NotNull
-    @NotBlank
     private String tokenId;
 
     @NotNull

@@ -1,13 +1,15 @@
 package com.jck.travel.flight.model.dto;
 
 
+import java.math.BigDecimal;
+
 public class TaxBreakUp {
 
     private String id;
 
     private String category;
 
-    private String amount;
+    private BigDecimal amount;
 
     public String getId() {
         return id;
@@ -25,11 +27,11 @@ public class TaxBreakUp {
         this.category = category;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 }

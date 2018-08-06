@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Flight implements Sortable<Flight>, Searchable<Flight> {
 
-    private String id;
+    private String id; // In TBO(ResultIndex), In Galileo(Key)
 
     private FlightSource source;
 
@@ -156,8 +156,9 @@ public class Flight implements Sortable<Flight>, Searchable<Flight> {
         return segments;
     }
 
-    public void setSegments(List<Segment> segments) {
-        this.segments = segments;
+    public void setSegments(Segment segment) {
+        if (segment != null)
+            this.segments.add(segment);
     }
 
     public Fare getFares() {
@@ -172,16 +173,18 @@ public class Flight implements Sortable<Flight>, Searchable<Flight> {
         return fareRules;
     }
 
-    public void setFareRules(List<FareRule> fareRules) {
-        this.fareRules = fareRules;
+    public void setFareRules(FareRule fareRule) {
+        if (fareRule != null)
+            this.fareRules.add(fareRule);
     }
 
     public List<FareBreakDown> getFareBreakDowns() {
         return fareBreakDowns;
     }
 
-    public void setFareBreakDowns(List<FareBreakDown> fareBreakDowns) {
-        this.fareBreakDowns = fareBreakDowns;
+    public void setFareBreakDowns(FareBreakDown fareBreakDown) {
+        if (fareBreakDown != null)
+            this.fareBreakDowns.add(fareBreakDown);
     }
 
     @Override

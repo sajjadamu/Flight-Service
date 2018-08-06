@@ -1,5 +1,6 @@
 package com.jck.travel.flight.model;
 
+import com.jck.travel.flight.model.dto.Result;
 import com.jck.travel.flight.util.enumeration.Status;
 
 import javax.validation.constraints.NotNull;
@@ -56,6 +57,15 @@ public class Response implements Serializable {
     }
 
     public static Response setSuccessResponse(Status status, String tokenId, List responseObj) {
+        Response response = new Response();
+        response.setStatus(status);
+        response.setError(new Error());
+        response.setTokenId(tokenId);
+        response.setResponse(responseObj);
+        return response;
+    }
+
+    public static Response setSuccessResponse(Status status, String tokenId, Result responseObj) {
         Response response = new Response();
         response.setStatus(status);
         response.setError(new Error());

@@ -40,10 +40,7 @@ public class FactoryServiceImpl extends ModelBindingUtil implements FactoryServi
         restService.setResponse(restService.sendPostRequest(config.getTboSearchPath(), searchCo.getTboServiceRequest()));
 
         if (restService.getHttpStatus().equals(Status.OK)) {
-            JSONObject jsonResponse = restService.getResponse();
-            super.makeJavaMap(jsonResponse);
-            //responseService.getSearch(null);
-            return Response.setSuccessResponse(Status.OK, null, jsonResponse.toMap());
+            return Response.setSuccessResponse(Status.OK, null, super.getResponse(restService.getResponse()));
         } else {
             return Response.setErrorResponse(restService.getHttpStatus(), null, restService.getError());
         }

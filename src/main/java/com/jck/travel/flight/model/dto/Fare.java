@@ -1,6 +1,7 @@
 package com.jck.travel.flight.model.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class Fare {
      * Only for TBO fare Object
      */
 
-    private List<TaxBreakUp> taxBreakUp;
+    private List<TaxBreakUp> taxBreakUp = new ArrayList<>();
 
     private BigDecimal additionalTxnFeePub;
 
@@ -328,7 +329,8 @@ public class Fare {
         return taxBreakUp;
     }
 
-    public void setTaxBreakUp(List<TaxBreakUp> taxBreakUp) {
-        this.taxBreakUp = taxBreakUp;
+    public void setTaxBreakUp(TaxBreakUp taxBreakUp) {
+        if (taxBreakUp != null)
+            this.taxBreakUp.add(taxBreakUp);
     }
 }

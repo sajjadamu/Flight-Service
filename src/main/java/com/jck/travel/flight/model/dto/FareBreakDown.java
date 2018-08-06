@@ -4,6 +4,8 @@ package com.jck.travel.flight.model.dto;
 import com.jck.travel.flight.util.enumeration.PaxType;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class FareBreakDown {
@@ -12,11 +14,11 @@ public class FareBreakDown {
 
     private String totalFare;
 
-    private String baseFare; // Same for TBO, Galileo
+    private BigDecimal baseFare; // Same for TBO, Galileo
 
     private BigDecimal totalTax; //For TBO
 
-    private TaxBreakUp taxBreakUp; // This properties for TBO ("YQTax","PGCharge"), and galileo gives full breakup
+    private List<TaxBreakUp> taxBreakUp = new ArrayList<>(); // This properties for TBO ("YQTax","PGCharge"), and galileo gives full breakup
 
     private PaxType passengerType;
 
@@ -38,11 +40,11 @@ public class FareBreakDown {
         this.totalFare = totalFare;
     }
 
-    public String getBaseFare() {
+    public BigDecimal getBaseFare() {
         return baseFare;
     }
 
-    public void setBaseFare(String baseFare) {
+    public void setBaseFare(BigDecimal baseFare) {
         this.baseFare = baseFare;
     }
 
@@ -54,12 +56,13 @@ public class FareBreakDown {
         this.totalTax = totalTax;
     }
 
-    public TaxBreakUp getTaxBreakUp() {
+    public List<TaxBreakUp> getTaxBreakUp() {
         return taxBreakUp;
     }
 
     public void setTaxBreakUp(TaxBreakUp taxBreakUp) {
-        this.taxBreakUp = taxBreakUp;
+        if (taxBreakUp != null)
+            this.taxBreakUp.add(taxBreakUp);
     }
 
     public PaxType getPassengerType() {
