@@ -26,19 +26,28 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(JSONException.class)
     @ResponseBody
-    public Response jsonException(HttpServletRequest request) {
+    public Response jsonException(HttpServletRequest request, JSONException jsonEx) {
+        if (jsonEx != null)
+            jsonEx.printStackTrace();
+
         return (Response) request.getAttribute("errorResponse");
     }
 
     @ExceptionHandler(AuthenticationException.class)
     @ResponseBody
-    public Response AuthException(HttpServletRequest request) {
+    public Response AuthException(HttpServletRequest request, AuthenticationException authEx) {
+        if (authEx != null)
+            authEx.printStackTrace();
+
         return (Response) request.getAttribute("errorResponse");
     }
 
     @ExceptionHandler(HttpClientErrorException.class)
     @ResponseBody
-    public Response AuthAPIException(HttpServletRequest request) {
+    public Response AuthAPIException(HttpServletRequest request, HttpClientErrorException httpEx) {
+        if (httpEx != null)
+            httpEx.printStackTrace();
+
         return Error.setErrorResponse(null, ErrorCode.UNAUTHORIZED.getCode(), "Authentication Fail.");
     }
 
@@ -50,7 +59,10 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseBody
-    public Response badRequestException(HttpServletRequest request) {
+    public Response badRequestException(HttpServletRequest request, BadRequestException badEx) {
+        if (badEx != null)
+            badEx.printStackTrace();
+
         Response response = (Response) request.getAttribute("errorResponse");
         response.setStatus(Status.BAD_REQUEST);
         return response;
@@ -58,29 +70,37 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(IOException.class)
     @ResponseBody
-    public Response IOException(HttpServletRequest request) {
-        System.out.println("========IOException=============");
+    public Response IOException(HttpServletRequest request, IOException ioEx) {
+        if (ioEx != null)
+            ioEx.printStackTrace();
+
         return new Response();
     }
 
     @ExceptionHandler(ParseException.class)
     @ResponseBody
-    public Response parseException(HttpServletRequest request) {
-        System.out.println("========date parse flow=============");
+    public Response parseException(HttpServletRequest request, ParseException parseEx) {
+        if (parseEx != null)
+            parseEx.printStackTrace();
+
         return new Response();
     }
 
     @ExceptionHandler(JSONResponseNotFoundException.class)
     @ResponseBody
-    public Response jsonResponseNotFoundException(HttpServletRequest request) {
-        System.out.println("========JSON Response Not Found Exception=============");
+    public Response jsonResponseNotFoundException(HttpServletRequest request, JSONResponseNotFoundException jsonRespEx) {
+        if (jsonRespEx != null)
+            jsonRespEx.printStackTrace();
+
         return new Response();
     }
 
     @ExceptionHandler(ClassNotFoundException.class)
     @ResponseBody
-    public Response ClassNotFoundException(HttpServletRequest request) {
-        System.out.println("========ClassNotFoundException=============");
+    public Response ClassNotFoundException(HttpServletRequest request, ClassNotFoundException classNotEx) {
+        if (classNotEx != null)
+            classNotEx.printStackTrace();
+
         return new Response();
     }
 }
