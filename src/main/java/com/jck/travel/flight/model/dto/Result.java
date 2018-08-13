@@ -10,7 +10,7 @@ public class Result {
 
     private String destination;
 
-    private List<Flight> results = new LinkedList<>();
+    private List<List<Flight>> results = new LinkedList<>();
 
     public String getOrigin() {
         return origin;
@@ -28,12 +28,12 @@ public class Result {
         this.destination = destination;
     }
 
-    public List<Flight> getResults() {
+    public List<List<Flight>> getResults() {
         return results;
     }
 
-    public void setResults(Flight flight) {
-        if (flight != null)
-            this.results.add(flight);
+    public void setResults(List<Flight> results) {
+        if (results != null)
+            this.results.add(results);
     }
 }

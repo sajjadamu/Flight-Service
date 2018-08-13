@@ -6,10 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class ModelBindingUtil {
 
@@ -23,6 +20,7 @@ public abstract class ModelBindingUtil {
             result.setOrigin(jsonResponse.getString("origin"));
             result.setDestination(jsonResponse.getString("destination"));
 
+            List<Flight> flightList = new LinkedList<>();
             JSONArray resultArray = jsonResponse.getJSONArray("results");
             for (int i = 0; i < resultArray.length(); i++) {
 
@@ -143,8 +141,10 @@ public abstract class ModelBindingUtil {
                     flight.setGSTAllowed(jsonFlight.getBoolean("GSTAllowed"));
                     flight.setLCC(jsonFlight.getBoolean("IsLCC"));
                     flight.setId(jsonFlight.getString("ResultIndex"));
-                    result.setResults(flight);
+
+                    flightList.add(flight);
                 }
+                result.setResults(flightList);
             }
         } catch (JSONException ex) {
             ex.printStackTrace();

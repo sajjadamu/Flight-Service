@@ -2,6 +2,7 @@ package com.jck.travel.flight.controller;
 
 import com.jck.travel.flight.model.Error;
 import com.jck.travel.flight.model.Response;
+import com.jck.travel.flight.model.co.FareRuleCo;
 import com.jck.travel.flight.model.co.FilterCo;
 import com.jck.travel.flight.model.co.SearchCo;
 import com.jck.travel.flight.service.FactoryService;
@@ -22,7 +23,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/rest/flight")
 public class FlightController {
@@ -49,6 +49,18 @@ public class FlightController {
         }
 
         return factoryService.getSearch(searchCo);
+    }
+
+    @RequestMapping(value = "/fare_rule", method = RequestMethod.POST, consumes = "application/json")
+    public Response fareRule(@RequestBody @Valid FareRuleCo fareRuleCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException, ParseException, JSONResponseNotFoundException {
+
+        fareRuleCo.setTokenId(String.valueOf(request.getAttribute("credentials")));
+        if (bindingResult.hasErrors()) {
+            request.setAttribute("errorResponse", Error.setErrorResponse(fareRuleCo.getTokenId(), ErrorCode.BAD_REQUEST.getCode(), "Bad Request"));
+            throw new BadRequestException("Bad Request. Params missing");
+        }
+
+        return factoryService.getFareRule(fareRuleCo);
     }
 
     @RequestMapping(value = "/filter/price", method = RequestMethod.GET, consumes = "application/json")
