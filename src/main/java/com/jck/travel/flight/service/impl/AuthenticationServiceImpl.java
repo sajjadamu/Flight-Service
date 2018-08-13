@@ -2,7 +2,10 @@ package com.jck.travel.flight.service.impl;
 
 import com.jck.travel.flight.config.ApplicationConfig;
 import com.jck.travel.flight.service.AuthenticationService;
+import com.jck.travel.flight.service.RedisClientService;
 import com.jck.travel.flight.util.exception.AuthenticationException;
+import com.jck.travel.flight.util.exception.BadRequestException;
+import com.jck.travel.flight.util.exception.JSONResponseNotFoundException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -26,19 +29,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private ApplicationConfig config;
 
+    @Autowired
+    private RedisClientService redisClientService;
+
     @Override
-    public boolean isAuthorised(String username, String token) throws AuthenticationException {
-        return checkAuthorization(username, token);
+    public boolean isAuthorised(String username, String token, HttpServletRequest request) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException {
+        if (isSearchUrl(request.getRequestURI()))
+            return checkAuthorization(username, token);
+        else
+            return checkAuthorization(token);
     }
 
     @Override
-    public boolean isAuthorised(String token) throws AuthenticationException {
-        return true;
-    }
-
-    @Override
-    public boolean isAuthorised(HttpServletRequest request) throws AuthenticationException {
-        return checkAuthorization(getUserCredentials(request).get("username"), getUserCredentials(request).get("token"));
+    public boolean isAuthorised(HttpServletRequest request) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException {
+        return isAuthorised(getUserCredentials(request).get("username"), getUserCredentials(request).get("token"), request);
     }
 
     @Override
@@ -141,5 +145,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new AuthenticationException("AuthenticationException : Invalid User Credentials");
         }
         return ((status.getStatusCodeValue() == 200) && (status.hasBody()));
+    }
+
+    private boolean isSearchUrl(String url) {
+        return url.contains(config.getJckSearchPath());
+    }
+
+    private boolean checkAuthorization(@NotNull String token) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException {
+
+        if (redisClientService.isValid(token))
+            return true;
+        else
+            throw new AuthenticationException("AuthenticationException : Invalid User Credentials");
     }
 }
