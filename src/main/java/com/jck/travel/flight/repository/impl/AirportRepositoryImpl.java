@@ -27,7 +27,7 @@ public class AirportRepositoryImpl implements AirportRepository {
     @Override
     public List<Airport> getAirport(String cityNameCode) {
         Session session = sessionFactory.getCurrentSession();
-        List<Airport> airports=new ArrayList<>();
+        List<Airport> airports = new ArrayList<>();
         session.beginTransaction();
         try {
             CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -35,13 +35,11 @@ public class AirportRepositoryImpl implements AirportRepository {
             Root<Airport> root = criteria.from(Airport.class);
             criteria.select(root).where(builder.or(builder.like(root.<String>get("airportCode"),
                     cityNameCode + "%"), builder.like(root.<String>get("airportName"), cityNameCode + "%")));
-            airports= session.createQuery(criteria).getResultList();
+            airports = session.createQuery(criteria).getResultList();
             session.getTransaction().commit();
-            session.getTransaction().commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             session.close();
         }
         return airports;
@@ -50,7 +48,7 @@ public class AirportRepositoryImpl implements AirportRepository {
     @Override
     public List<City> getCity(String cityCodeName) {
         Session session = sessionFactory.getCurrentSession();
-        List<City> cityList=new ArrayList<>();
+        List<City> cityList = new ArrayList<>();
         session.beginTransaction();
         try {
             CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -58,12 +56,11 @@ public class AirportRepositoryImpl implements AirportRepository {
             Root<City> root = criteria.from(City.class);
             criteria.select(root).where(builder.or(builder.like(root.<String>get("cityCode"),
                     cityCodeName + "%"), builder.like(root.<String>get("cityName"), cityCodeName + "%")));
-            cityList= session.createQuery(criteria).getResultList();
+            cityList = session.createQuery(criteria).getResultList();
             session.getTransaction().commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             session.close();
         }
         return cityList;
@@ -73,20 +70,19 @@ public class AirportRepositoryImpl implements AirportRepository {
     @Override
     public Airport getAirportByCityId(City city) {
         Session session = sessionFactory.getCurrentSession();
-        Airport airport=new Airport();
+        Airport airport = new Airport();
         session.beginTransaction();
         try {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Airport> criteria = builder.createQuery(Airport.class);
             Root<Airport> root = criteria.from(Airport.class);
             criteria.select(root).where(builder.equal(root.get("city"), city));
-            airport= session.createQuery(criteria).getSingleResult();
+            airport = session.createQuery(criteria).getSingleResult();
             session.getTransaction().commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            return  null;
-        }
-        finally {
+            return null;
+        } finally {
             session.close();
         }
         return airport;
