@@ -5,8 +5,8 @@ import javax.validation.constraints.NotNull;
 public enum Status {
     OK(200),
     NOT_ACCEPTABLE(406),
-    BAD_REQUEST(400);
-
+    BAD_REQUEST(400),
+    GATEWAY_TIMEOUT(504);
     private final int code;
 
     Status(final int code) {

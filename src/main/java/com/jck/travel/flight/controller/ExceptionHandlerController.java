@@ -74,7 +74,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         if (ioEx != null)
             ioEx.printStackTrace();
 
-        return new Response();
+        return Response.setErrorResponse(Status.GATEWAY_TIMEOUT, null, Error.setPreDefinedError(Status.GATEWAY_TIMEOUT.getCode(), "Connection Error."));
     }
 
     @ExceptionHandler(ParseException.class)

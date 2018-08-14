@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/rest/flight")
 public class FlightController {

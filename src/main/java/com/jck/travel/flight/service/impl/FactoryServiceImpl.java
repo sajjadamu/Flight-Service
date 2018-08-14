@@ -124,7 +124,7 @@ public class FactoryServiceImpl extends ModelBindingUtil implements FactoryServi
             restService.setResponse(restService.sendPostRequest(config.getTboFareRulePath(), fareRuleCo.getTboServiceRequest(String.valueOf(jsonObject.get("tokenId")), String.valueOf(jsonObject.get("traceId")))));
 
             if (restService.getHttpStatus().equals(Status.OK)) {
-                return Response.setSuccessResponse(Status.OK, null, restService.getResponse().toMap());
+                return Response.setSuccessResponse(Status.OK, fareRuleCo.getTokenId(), restService.getResponse().toMap());
             } else {
                 return Response.setErrorResponse(restService.getHttpStatus(), fareRuleCo.getTokenId(), restService.getError());
             }
