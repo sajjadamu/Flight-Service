@@ -8,10 +8,7 @@ import com.jck.travel.flight.util.enumeration.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin
@@ -51,8 +48,9 @@ public class AirportController {
         List<Map<String, String>> airLineList = new ArrayList<>();
 
         for (Airport airport : airports) {
-            Map<String, String> airLineObject = new HashMap<>();
-            airLineObject.put(airport.getAirportCode(), airport.getCity().getCityName() + " (" + airport.getAirportCode() + ") " + airport.getCity().getCountry().getCountryName() + " <br> " + airport.getAirportName());
+            Map<String, String> airLineObject = new LinkedHashMap<>();
+            airLineObject.put("key",airport.getAirportCode());
+            airLineObject.put("value", airport.getCity().getCityName() + " (" + airport.getAirportCode() + ") " + airport.getCity().getCountry().getCountryName() + " <br> " + airport.getAirportName());
             airLineList.add(airLineObject);
         }
         return airLineList;
