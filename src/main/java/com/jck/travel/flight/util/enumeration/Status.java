@@ -6,7 +6,11 @@ public enum Status {
     OK(200),
     NOT_ACCEPTABLE(406),
     BAD_REQUEST(400),
-    GATEWAY_TIMEOUT(504);
+    GATEWAY_TIMEOUT(504),
+    SERVICE_UNAVAILABLE(503),
+    INTERNAL_SERVER_ERROR(500),
+    UNAUTHORIZED(401);
+
     private final int code;
 
     Status(final int code) {

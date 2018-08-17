@@ -12,6 +12,7 @@ import com.jck.travel.flight.service.RestService;
 import com.jck.travel.flight.util.enumeration.DepartTime;
 import com.jck.travel.flight.util.enumeration.Status;
 import com.jck.travel.flight.util.exception.JSONResponseNotFoundException;
+import com.jck.travel.flight.util.exception.ServiceBlockerFoundException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +35,7 @@ public class FactoryServiceImpl extends ModelBindingUtil implements FactoryServi
     private ApplicationConfig config;
 
     @Override
-    public Response getSearch(SearchCo searchCo) throws ParseException, JSONResponseNotFoundException {
+    public Response getSearch(SearchCo searchCo) throws ParseException, JSONResponseNotFoundException, ServiceBlockerFoundException {
         restService.setResponse(restService.sendPostRequest(config.getTboSearchPath(), searchCo.getTboServiceRequest()));
 
         if (restService.getHttpStatus().equals(Status.OK)) {
@@ -115,16 +116,21 @@ public class FactoryServiceImpl extends ModelBindingUtil implements FactoryServi
     }
 
     @Override
-    public Response getFareRule(FareRuleCo fareRuleCo) throws ParseException, JSONResponseNotFoundException {
+    public Response getFareRule(FareRuleCo fareRuleCo) throws ParseException, JSONResponseNotFoundException, ServiceBlockerFoundException {
         Response response = redisClientService.getBucket(fareRuleCo.getTokenId());
         List jsonArray = (List) response.getResponse();
 
         if (jsonArray.size() == 1) {
             Map jsonObject = (Map) jsonArray.get(0);
+
+            if (jsonObject.get("tokenId") == null || jsonObject.get("traceId") == null) {
+                return Response.setErrorResponse(Status.NOT_ACCEPTABLE, fareRuleCo.getTokenId(), Error.setPreDefinedError(Status.NOT_ACCEPTABLE.getCode(), "Search not found"));
+            }
+
             restService.setResponse(restService.sendPostRequest(config.getTboFareRulePath(), fareRuleCo.getTboServiceRequest(String.valueOf(jsonObject.get("tokenId")), String.valueOf(jsonObject.get("traceId")))));
 
             if (restService.getHttpStatus().equals(Status.OK)) {
-                return Response.setSuccessResponse(Status.OK, fareRuleCo.getTokenId(), restService.getResponse().toMap());
+                return Response.setSuccessResponse(Status.OK, fareRuleCo.getTokenId(), super.getFareRuleResponse(restService.getResponse().getJSONArray("fareRules")));
             } else {
                 return Response.setErrorResponse(restService.getHttpStatus(), fareRuleCo.getTokenId(), restService.getError());
             }
@@ -133,8 +139,27 @@ public class FactoryServiceImpl extends ModelBindingUtil implements FactoryServi
     }
 
     @Override
-    public Response getFareQuote(FareQuoteCo fareQuoteCo) throws ParseException, JSONResponseNotFoundException {
-        return null;
+    public Response getFareQuote(FareQuoteCo fareQuoteCo) throws ParseException, JSONResponseNotFoundException, ServiceBlockerFoundException {
+        Response response = redisClientService.getBucket(fareQuoteCo.getTokenId());
+        List jsonArray = (List) response.getResponse();
+
+        if (jsonArray.size() == 1) {
+            Map jsonObject = (Map) jsonArray.get(0);
+
+            if (jsonObject.get("tokenId") == null || jsonObject.get("traceId") == null) {
+                return Response.setErrorResponse(Status.NOT_ACCEPTABLE, fareQuoteCo.getTokenId(), Error.setPreDefinedError(Status.NOT_ACCEPTABLE.getCode(), "Search not found"));
+            }
+
+            restService.setResponse(restService.sendPostRequest(config.getTboFareQuotePath(), fareQuoteCo.getTboServiceRequest(String.valueOf(jsonObject.get("tokenId")), String.valueOf(jsonObject.get("traceId")))));
+
+            if (restService.getHttpStatus().equals(Status.OK)) {
+                JSONObject object = restService.getResponse();
+                return Response.setSuccessResponse(Status.OK, fareQuoteCo.getTokenId(), super.getFareQuoteResponse(object.getBoolean("isPriceChanged"), object.getJSONObject("results")));
+            } else {
+                return Response.setErrorResponse(restService.getHttpStatus(), fareQuoteCo.getTokenId(), restService.getError());
+            }
+        } else
+            return Response.setErrorResponse(Status.NOT_ACCEPTABLE, fareQuoteCo.getTokenId(), Error.setPreDefinedError(Status.NOT_ACCEPTABLE.getCode(), "Search not found"));
     }
 
     @Override

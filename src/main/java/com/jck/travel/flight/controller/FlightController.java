@@ -2,17 +2,12 @@ package com.jck.travel.flight.controller;
 
 import com.jck.travel.flight.model.Error;
 import com.jck.travel.flight.model.Response;
-import com.jck.travel.flight.model.co.FareRuleCo;
-import com.jck.travel.flight.model.co.FilterCo;
-import com.jck.travel.flight.model.co.SearchCo;
+import com.jck.travel.flight.model.co.*;
 import com.jck.travel.flight.service.FactoryService;
 import com.jck.travel.flight.service.SerializeService;
 import com.jck.travel.flight.service.impl.AbstractRequestUtil;
 import com.jck.travel.flight.util.enumeration.ErrorCode;
-import com.jck.travel.flight.util.exception.AuthenticationException;
-import com.jck.travel.flight.util.exception.BadRequestException;
-import com.jck.travel.flight.util.exception.JSONResponseNotFoundException;
-import com.jck.travel.flight.util.exception.SearchAlreadyExistException;
+import com.jck.travel.flight.util.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +31,7 @@ public class FlightController {
 
 
     @RequestMapping(value = "/search", method = RequestMethod.POST, consumes = "application/json")
-    public Response search(@RequestBody @Valid SearchCo searchCo, BindingResult bindingResult, HttpServletRequest request) throws IOException, NoSuchAlgorithmException, ParseException, AuthenticationException, BadRequestException, JSONResponseNotFoundException {
+    public Response search(@RequestBody @Valid SearchCo searchCo, BindingResult bindingResult, HttpServletRequest request) throws IOException, NoSuchAlgorithmException, ParseException, AuthenticationException, BadRequestException, JSONResponseNotFoundException, ServiceBlockerFoundException {
         searchCo.setUserIp(AbstractRequestUtil.getClientIpAddress(request));
 
         if (bindingResult.hasErrors() && !searchCo.validateSegments()) {
@@ -53,7 +48,7 @@ public class FlightController {
     }
 
     @RequestMapping(value = "/fare_rule", method = RequestMethod.POST, consumes = "application/json")
-    public Response fareRule(@RequestBody @Valid FareRuleCo fareRuleCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException, ParseException, JSONResponseNotFoundException {
+    public Response fareRule(@RequestBody @Valid FareRuleCo fareRuleCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException, JSONResponseNotFoundException, ServiceBlockerFoundException, ParseException {
 
         fareRuleCo.setTokenId(String.valueOf(request.getAttribute("credentials")));
         if (bindingResult.hasErrors()) {
@@ -62,6 +57,56 @@ public class FlightController {
         }
 
         return factoryService.getFareRule(fareRuleCo);
+    }
+
+    @RequestMapping(value = "/fare_quote", method = RequestMethod.POST, consumes = "application/json")
+    public Response fareQuote(@RequestBody @Valid FareQuoteCo fareQuoteCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException, ParseException, JSONResponseNotFoundException, ServiceBlockerFoundException {
+
+        fareQuoteCo.setTokenId(String.valueOf(request.getAttribute("credentials")));
+        if (bindingResult.hasErrors()) {
+            request.setAttribute("errorResponse", Error.setErrorResponse(fareQuoteCo.getTokenId(), ErrorCode.BAD_REQUEST.getCode(), "Bad Request"));
+            throw new BadRequestException("Bad Request. Params missing");
+        }
+
+        return factoryService.getFareQuote(fareQuoteCo);
+    }
+
+/*
+    @RequestMapping(value = "/ssr", method = RequestMethod.POST, consumes = "application/json")
+    public Response meal_baggageInfo(@RequestBody @Valid FareQuoteCo fareQuoteCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException {
+
+        fareQuoteCo.setTokenId(String.valueOf(request.getAttribute("credentials")));
+        if (bindingResult.hasErrors()) {
+            request.setAttribute("errorResponse", Error.setErrorResponse(fareQuoteCo.getTokenId(), ErrorCode.BAD_REQUEST.getCode(), "Bad Request"));
+            throw new BadRequestException("Bad Request. Params missing");
+        }
+
+        return new Response();
+    }
+*/
+
+    @RequestMapping(value = "/booking_holding", method = RequestMethod.POST, consumes = "application/json")
+    public Response makeBooking(@RequestBody @Valid BookingCo bookingCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException, ParseException, JSONResponseNotFoundException {
+
+        bookingCo.setTokenId(String.valueOf(request.getAttribute("credentials")));
+        if (bindingResult.hasErrors()) {
+            request.setAttribute("errorResponse", Error.setErrorResponse(bookingCo.getTokenId(), ErrorCode.BAD_REQUEST.getCode(), "Bad Request"));
+            throw new BadRequestException("Bad Request. Params missing");
+        }
+
+        return factoryService.makeBooking(bookingCo);
+    }
+
+    @RequestMapping(value = "/ssr", method = RequestMethod.POST, consumes = "application/json")
+    public Response getTicket(@RequestBody @Valid TicketCo ticketCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException, ParseException, JSONResponseNotFoundException {
+
+        ticketCo.setTokenId(String.valueOf(request.getAttribute("credentials")));
+        if (bindingResult.hasErrors()) {
+            request.setAttribute("errorResponse", Error.setErrorResponse(ticketCo.getTokenId(), ErrorCode.BAD_REQUEST.getCode(), "Bad Request"));
+            throw new BadRequestException("Bad Request. Params missing");
+        }
+
+        return new Response();
     }
 
     @RequestMapping(value = "/filter/price", method = RequestMethod.GET, consumes = "application/json")

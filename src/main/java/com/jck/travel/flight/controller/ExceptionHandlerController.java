@@ -4,10 +4,7 @@ import com.jck.travel.flight.model.Error;
 import com.jck.travel.flight.model.Response;
 import com.jck.travel.flight.util.enumeration.ErrorCode;
 import com.jck.travel.flight.util.enumeration.Status;
-import com.jck.travel.flight.util.exception.AuthenticationException;
-import com.jck.travel.flight.util.exception.BadRequestException;
-import com.jck.travel.flight.util.exception.JSONResponseNotFoundException;
-import com.jck.travel.flight.util.exception.SearchAlreadyExistException;
+import com.jck.travel.flight.util.exception.*;
 import org.json.JSONException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -75,6 +72,15 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
             ioEx.printStackTrace();
 
         return Response.setErrorResponse(Status.GATEWAY_TIMEOUT, null, Error.setPreDefinedError(Status.GATEWAY_TIMEOUT.getCode(), "Connection Error."));
+    }
+
+    @ExceptionHandler(ServiceBlockerFoundException.class)
+    @ResponseBody
+    public Response httpServerErrorException(ServiceBlockerFoundException ioEx) {
+        if (ioEx != null)
+            ioEx.printStackTrace();
+
+        return Response.setErrorResponse(Status.INTERNAL_SERVER_ERROR, null, Error.setPreDefinedError(Status.INTERNAL_SERVER_ERROR.getCode(), "Service blocker found. Which breaks this functionality"));
     }
 
     @ExceptionHandler(ParseException.class)

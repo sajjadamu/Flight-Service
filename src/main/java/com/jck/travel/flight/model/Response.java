@@ -1,6 +1,5 @@
 package com.jck.travel.flight.model;
 
-import com.jck.travel.flight.model.dto.Result;
 import com.jck.travel.flight.util.enumeration.Status;
 
 import javax.validation.constraints.NotNull;
@@ -8,12 +7,12 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class Response implements Serializable {
+public class Response<T> implements Serializable {
 
     private int status;
     private Error error;
     private String tokenId;
-    private Object response;
+    private T response;
 
     public int getStatus() {
         return status;
@@ -39,16 +38,16 @@ public class Response implements Serializable {
         this.tokenId = tokenId;
     }
 
-    public Object getResponse() {
+    public T getResponse() {
         return response;
     }
 
-    public void setResponse(Object response) {
+    public void setResponse(T response) {
         this.response = response;
     }
 
-    public static Response setSuccessResponse(Status status, String tokenId, Map responseObj) {
-        Response response = new Response();
+    public static Response setSuccessResponse(Status status, String tokenId, Map<String, Object> responseObj) {
+        Response<Map<String, Object>> response = new Response<>();
         response.setStatus(status);
         response.setError(new Error());
         response.setTokenId(tokenId);
@@ -56,17 +55,8 @@ public class Response implements Serializable {
         return response;
     }
 
-    public static Response setSuccessResponse(Status status, String tokenId, List responseObj) {
-        Response response = new Response();
-        response.setStatus(status);
-        response.setError(new Error());
-        response.setTokenId(tokenId);
-        response.setResponse(responseObj);
-        return response;
-    }
-
-    public static Response setSuccessResponse(Status status, String tokenId, Result responseObj) {
-        Response response = new Response();
+    public static Response setSuccessResponse(Status status, String tokenId, List<?> responseObj) {
+        Response<List<?>> response = new Response<>();
         response.setStatus(status);
         response.setError(new Error());
         response.setTokenId(tokenId);

@@ -6,6 +6,7 @@ import com.jck.travel.flight.service.RedisClientService;
 import com.jck.travel.flight.util.exception.AuthenticationException;
 import com.jck.travel.flight.util.exception.BadRequestException;
 import com.jck.travel.flight.util.exception.JSONResponseNotFoundException;
+import com.jck.travel.flight.util.exception.ServiceBlockerFoundException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -33,7 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private RedisClientService redisClientService;
 
     @Override
-    public boolean isAuthorised(String username, String token, HttpServletRequest request) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException {
+    public boolean isAuthorised(String username, String token, HttpServletRequest request) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException, ServiceBlockerFoundException {
         if (isSearchUrl(request.getRequestURI()))
             return checkAuthorization(username, token);
         else
@@ -41,7 +42,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public boolean isAuthorised(HttpServletRequest request) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException {
+    public boolean isAuthorised(HttpServletRequest request) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException, ServiceBlockerFoundException {
         return isAuthorised(getUserCredentials(request).get("username"), getUserCredentials(request).get("token"), request);
     }
 
@@ -151,7 +152,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return url.contains(config.getJckSearchPath());
     }
 
-    private boolean checkAuthorization(@NotNull String token) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException {
+    private boolean checkAuthorization(@NotNull String token) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException, ServiceBlockerFoundException {
 
         if (redisClientService.isValid(token))
             return true;

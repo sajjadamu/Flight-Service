@@ -7,6 +7,7 @@ import com.jck.travel.flight.service.RestService;
 import com.jck.travel.flight.util.enumeration.Status;
 import com.jck.travel.flight.util.exception.BadRequestException;
 import com.jck.travel.flight.util.exception.JSONResponseNotFoundException;
+import com.jck.travel.flight.util.exception.ServiceBlockerFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class RedisClientServiceImpl implements RedisClientService {
     private ApplicationConfig config;
 
     @Override
-    public boolean isValid(String token) throws JSONResponseNotFoundException, BadRequestException {
+    public boolean isValid(String token) throws JSONResponseNotFoundException, BadRequestException, ServiceBlockerFoundException {
         Map<String, String> params = new LinkedHashMap<>();
         params.put("token", token);
 
@@ -40,7 +41,7 @@ public class RedisClientServiceImpl implements RedisClientService {
     }
 
     @Override
-    public Response getBucket(String token) throws JSONResponseNotFoundException {
+    public Response getBucket(String token) throws JSONResponseNotFoundException, ServiceBlockerFoundException {
         Map<String, String> params = new LinkedHashMap<>();
         params.put("token", token);
 
@@ -66,7 +67,7 @@ public class RedisClientServiceImpl implements RedisClientService {
     }
 
     @Override
-    public Response setBucket(Map<String, ?> queryData) throws JSONResponseNotFoundException {
+    public Response setBucket(Map<String, ?> queryData) throws JSONResponseNotFoundException, ServiceBlockerFoundException {
         restService.setResponse(restService.sendPostRequest(config.getRedisTokenCachePath(), queryData));
         if (restService.getHttpStatus().equals(Status.OK)) {
             return Response.setSuccessResponse(Status.OK, null, restService.getResponse().toMap());

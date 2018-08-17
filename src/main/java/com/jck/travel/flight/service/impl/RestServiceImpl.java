@@ -5,12 +5,14 @@ import com.jck.travel.flight.model.Error;
 import com.jck.travel.flight.service.RestService;
 import com.jck.travel.flight.util.enumeration.Status;
 import com.jck.travel.flight.util.exception.JSONResponseNotFoundException;
+import com.jck.travel.flight.util.exception.ServiceBlockerFoundException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -34,14 +36,18 @@ public class RestServiceImpl implements RestService {
     }
 
     @Override
-    public JSONObject sendPostRequest(String url, Map<String, ?> queryParams) {
+    public JSONObject sendPostRequest(String url, Map<String, ?> queryParams) throws ServiceBlockerFoundException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new JSONObject(new RestTemplate().postForObject(url, new HttpEntity<>(new Gson().toJson(queryParams), headers), String.class));
+        try {
+            return new JSONObject(new RestTemplate().postForObject(url, new HttpEntity<>(new Gson().toJson(queryParams), headers), String.class));
+        } catch (HttpServerErrorException ex) {
+            throw new ServiceBlockerFoundException("Some resource is not available");
+        }
     }
 
     @Override
-    public ResponseEntity<String> sendGetRequest(String url, Map<String, ?> queryParams) {
+    public ResponseEntity<String> sendGetRequest(String url, Map<String, ?> queryParams) throws ServiceBlockerFoundException {
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
 
         for (Map.Entry<String, ?> entry : queryParams.entrySet()) {
@@ -49,15 +55,22 @@ public class RestServiceImpl implements RestService {
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new RestTemplate().exchange(builder.toUriString(), HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        try {
+            return new RestTemplate().exchange(builder.toUriString(), HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        } catch (HttpServerErrorException ex) {
+            throw new ServiceBlockerFoundException("Some resource is not available");
+        }
     }
 
     @Override
-    public ResponseEntity<String> sendGetRequest(String url) {
+    public ResponseEntity<String> sendGetRequest(String url) throws ServiceBlockerFoundException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
-        return new RestTemplate().exchange(url, HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        try {
+            return new RestTemplate().exchange(url, HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        } catch (HttpServerErrorException ex) {
+            throw new ServiceBlockerFoundException("Some resource is not available");
+        }
     }
 
     @Override

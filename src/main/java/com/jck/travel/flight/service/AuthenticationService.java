@@ -3,6 +3,7 @@ package com.jck.travel.flight.service;
 import com.jck.travel.flight.util.exception.AuthenticationException;
 import com.jck.travel.flight.util.exception.BadRequestException;
 import com.jck.travel.flight.util.exception.JSONResponseNotFoundException;
+import com.jck.travel.flight.util.exception.ServiceBlockerFoundException;
 import org.json.JSONObject;
 
 import javax.servlet.ServletOutputStream;
@@ -14,9 +15,9 @@ import java.util.Map;
 
 public interface AuthenticationService {
 
-    public boolean isAuthorised(String username, String token, HttpServletRequest request) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException;
+    public boolean isAuthorised(String username, String token, HttpServletRequest request) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException, ServiceBlockerFoundException;
 
-    public boolean isAuthorised(HttpServletRequest request) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException;
+    public boolean isAuthorised(HttpServletRequest request) throws AuthenticationException, BadRequestException, JSONResponseNotFoundException, ServiceBlockerFoundException;
 
     public Map<String, String> getUserCredentials(HttpServletRequest request) throws AuthenticationException;
 

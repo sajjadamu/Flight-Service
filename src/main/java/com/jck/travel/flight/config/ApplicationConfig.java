@@ -21,8 +21,15 @@ public class ApplicationConfig {
     @Value("${tbo.service.fare.rule.path}")
     private String tboFareRulePath;
 
+    @Value("${tbo.service.fare.quote.path}")
+    private String tboFareQuotePath;
+
     @Value("${redis.service.token.cache}")
     private String redisTokenCachePath;
+
+    public String getTboFareQuotePath() {
+        return tboFareQuotePath;
+    }
 
     public String getApiVerificationPath() {
         return apiVerificationPath;
