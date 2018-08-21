@@ -24,8 +24,22 @@ public class ApplicationConfig {
     @Value("${tbo.service.fare.quote.path}")
     private String tboFareQuotePath;
 
+    @Value("${tbo.service.booking.holding.path}")
+    private String tboBookingHoldingPath;
+
+    @Value("${tbo.service.flight.ticket.path}")
+    private String tboFlightTicketPath;
+
     @Value("${redis.service.token.cache}")
     private String redisTokenCachePath;
+
+    public String getTboFlightTicketPath() {
+        return tboFlightTicketPath;
+    }
+
+    public String getTboBookingHoldingPath() {
+        return tboBookingHoldingPath;
+    }
 
     public String getTboFareQuotePath() {
         return tboFareQuotePath;

@@ -86,8 +86,9 @@ public class FlightController {
 */
 
     @RequestMapping(value = "/booking_holding", method = RequestMethod.POST, consumes = "application/json")
-    public Response makeBooking(@RequestBody @Valid BookingCo bookingCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException, ParseException, JSONResponseNotFoundException {
+    public Response makeBooking(@RequestBody @Valid BookingCo bookingCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException, ParseException, JSONResponseNotFoundException, ServiceBlockerFoundException {
 
+        bookingCo.setUserIp(AbstractRequestUtil.getClientIpAddress(request));
         bookingCo.setTokenId(String.valueOf(request.getAttribute("credentials")));
         if (bindingResult.hasErrors()) {
             request.setAttribute("errorResponse", Error.setErrorResponse(bookingCo.getTokenId(), ErrorCode.BAD_REQUEST.getCode(), "Bad Request"));
@@ -97,16 +98,17 @@ public class FlightController {
         return factoryService.makeBooking(bookingCo);
     }
 
-    @RequestMapping(value = "/ssr", method = RequestMethod.POST, consumes = "application/json")
-    public Response getTicket(@RequestBody @Valid TicketCo ticketCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException, ParseException, JSONResponseNotFoundException {
+    @RequestMapping(value = "/ticket", method = RequestMethod.POST, consumes = "application/json")
+    public Response getTicket(@RequestBody @Valid TicketCo ticketCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException, ParseException, JSONResponseNotFoundException, ServiceBlockerFoundException {
 
+        ticketCo.setUserIp(AbstractRequestUtil.getClientIpAddress(request));
         ticketCo.setTokenId(String.valueOf(request.getAttribute("credentials")));
         if (bindingResult.hasErrors()) {
             request.setAttribute("errorResponse", Error.setErrorResponse(ticketCo.getTokenId(), ErrorCode.BAD_REQUEST.getCode(), "Bad Request"));
             throw new BadRequestException("Bad Request. Params missing");
         }
 
-        return new Response();
+        return factoryService.getTicket(ticketCo);
     }
 
     @RequestMapping(value = "/filter/price", method = RequestMethod.GET, consumes = "application/json")

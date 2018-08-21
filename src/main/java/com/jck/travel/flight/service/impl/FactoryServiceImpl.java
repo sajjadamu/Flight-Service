@@ -163,7 +163,50 @@ public class FactoryServiceImpl extends ModelBindingUtil implements FactoryServi
     }
 
     @Override
-    public Response makeBooking(BookingCo bookingCo) throws ParseException, JSONResponseNotFoundException {
-        return null;
+    public Response makeBooking(BookingCo bookingCo) throws ParseException, JSONResponseNotFoundException, ServiceBlockerFoundException {
+        Response response = redisClientService.getBucket(bookingCo.getTokenId());
+        List jsonArray = (List) response.getResponse();
+
+        if (jsonArray.size() == 1) {
+            Map jsonObject = (Map) jsonArray.get(0);
+
+            if (jsonObject.get("tokenId") == null || jsonObject.get("traceId") == null) {
+                return Response.setErrorResponse(Status.NOT_ACCEPTABLE, bookingCo.getTokenId(), Error.setPreDefinedError(Status.NOT_ACCEPTABLE.getCode(), "Search not found"));
+            }
+
+            restService.setResponse(restService.sendPostRequest(config.getTboBookingHoldingPath(), bookingCo.getTboServiceRequest(String.valueOf(jsonObject.get("tokenId")), String.valueOf(jsonObject.get("traceId")))));
+
+            if (restService.getHttpStatus().equals(Status.OK)) {
+                JSONObject object = restService.getResponse();
+                return Response.setSuccessResponse(Status.OK, bookingCo.getTokenId(), super.nonLCCHolding(object.getJSONObject("booking")));
+            } else {
+                return Response.setErrorResponse(restService.getHttpStatus(), bookingCo.getTokenId(), restService.getError());
+            }
+        } else
+            return Response.setErrorResponse(Status.NOT_ACCEPTABLE, bookingCo.getTokenId(), Error.setPreDefinedError(Status.NOT_ACCEPTABLE.getCode(), "Search not found"));
+    }
+
+    @Override
+    public Response getTicket(TicketCo ticketCo) throws JSONResponseNotFoundException, ServiceBlockerFoundException {
+        Response response = redisClientService.getBucket(ticketCo.getTokenId());
+        List jsonArray = (List) response.getResponse();
+
+        if (jsonArray.size() == 1) {
+            Map jsonObject = (Map) jsonArray.get(0);
+
+            if (jsonObject.get("tokenId") == null || jsonObject.get("traceId") == null) {
+                return Response.setErrorResponse(Status.NOT_ACCEPTABLE, ticketCo.getTokenId(), Error.setPreDefinedError(Status.NOT_ACCEPTABLE.getCode(), "Search not found"));
+            }
+
+            restService.setResponse(restService.sendPostRequest(config.getTboFlightTicketPath(), ticketCo.getTboServiceRequest(String.valueOf(jsonObject.get("tokenId")), String.valueOf(jsonObject.get("traceId")))));
+
+            if (restService.getHttpStatus().equals(Status.OK)) {
+                JSONObject object = restService.getResponse();
+                return Response.setSuccessResponse(Status.OK, ticketCo.getTokenId(), super.nonLCCHolding(object.getJSONObject("booking")));
+            } else {
+                return Response.setErrorResponse(restService.getHttpStatus(), ticketCo.getTokenId(), restService.getError());
+            }
+        } else
+            return Response.setErrorResponse(Status.NOT_ACCEPTABLE, ticketCo.getTokenId(), Error.setPreDefinedError(Status.NOT_ACCEPTABLE.getCode(), "Search not found"));
     }
 }
