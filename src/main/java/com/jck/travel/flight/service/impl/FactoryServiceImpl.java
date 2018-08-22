@@ -177,8 +177,7 @@ public class FactoryServiceImpl extends ModelBindingUtil implements FactoryServi
             restService.setResponse(restService.sendPostRequest(config.getTboBookingHoldingPath(), bookingCo.getTboServiceRequest(String.valueOf(jsonObject.get("tokenId")), String.valueOf(jsonObject.get("traceId")))));
 
             if (restService.getHttpStatus().equals(Status.OK)) {
-                JSONObject object = restService.getResponse();
-                return Response.setSuccessResponse(Status.OK, bookingCo.getTokenId(), super.nonLCCHolding(object.getJSONObject("booking")));
+                return Response.setSuccessResponse(Status.OK, bookingCo.getTokenId(), super.nonLCCHolding(restService.getResponse().getJSONObject("booking")));
             } else {
                 return Response.setErrorResponse(restService.getHttpStatus(), bookingCo.getTokenId(), restService.getError());
             }
@@ -201,8 +200,7 @@ public class FactoryServiceImpl extends ModelBindingUtil implements FactoryServi
             restService.setResponse(restService.sendPostRequest(config.getTboFlightTicketPath(), ticketCo.getTboServiceRequest(String.valueOf(jsonObject.get("tokenId")), String.valueOf(jsonObject.get("traceId")))));
 
             if (restService.getHttpStatus().equals(Status.OK)) {
-                JSONObject object = restService.getResponse();
-                return Response.setSuccessResponse(Status.OK, ticketCo.getTokenId(), super.nonLCCHolding(object.getJSONObject("booking")));
+                return Response.setSuccessResponse(Status.OK, ticketCo.getTokenId(), super.getTicketResponse(restService.getResponse().getJSONObject("ticket")));
             } else {
                 return Response.setErrorResponse(restService.getHttpStatus(), ticketCo.getTokenId(), restService.getError());
             }

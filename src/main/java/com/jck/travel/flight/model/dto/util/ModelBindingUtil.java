@@ -322,6 +322,14 @@ public abstract class ModelBindingUtil {
         return result;
     }
 
+    public Map<String, Object> getTicketResponse(JSONObject ticket) {
+        Map<String, Object> result = new LinkedHashMap<>();
+
+        result.put("ticket", ticket.toMap());
+        return result;
+    }
+
+
     public void makeJavaMap(JSONObject jsonResponse) {
         Map<String, Object> mapResponse = jsonResponse.toMap();
 
