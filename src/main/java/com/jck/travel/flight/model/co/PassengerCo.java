@@ -217,7 +217,7 @@ public class PassengerCo {
         this.fare = fare;
     }
 
-    public Map<String, ?> getTboRequest(String isLCC, String isMealRequired, String isSeatPrefRequired) {
+    public Map<String, Object> getTboRequest(String isLCC, String isMealRequired, String isSeatPrefRequired) {
         Map<String, Object> params = new LinkedHashMap<>();
 
         params.put("title", this.title);

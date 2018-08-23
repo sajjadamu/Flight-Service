@@ -103,7 +103,7 @@ public class FlightController {
 
         ticketCo.setUserIp(AbstractRequestUtil.getClientIpAddress(request));
         ticketCo.setTokenId(String.valueOf(request.getAttribute("credentials")));
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() || !ticketCo.isValidTicketRequest()) {
             request.setAttribute("errorResponse", Error.setErrorResponse(ticketCo.getTokenId(), ErrorCode.BAD_REQUEST.getCode(), "Bad Request"));
             throw new BadRequestException("Bad Request. Params missing");
         }
