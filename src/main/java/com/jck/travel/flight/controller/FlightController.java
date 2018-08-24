@@ -85,7 +85,7 @@ public class FlightController {
     }
 */
 
-    @RequestMapping(value = "/booking_holding", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/holding", method = RequestMethod.POST, consumes = "application/json")
     public Response makeBooking(@RequestBody @Valid BookingCo bookingCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException, ParseException, JSONResponseNotFoundException, ServiceBlockerFoundException {
 
         bookingCo.setUserIp(AbstractRequestUtil.getClientIpAddress(request));
