@@ -1,6 +1,8 @@
 package com.jck.travel.flight.model.dto.util;
 
 import com.jck.travel.flight.model.dto.*;
+import com.jck.travel.flight.util.enumeration.BookingStatus;
+import com.jck.travel.flight.util.enumeration.TicketStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -205,31 +207,7 @@ public abstract class ModelBindingUtil {
         return result;
     }
 
-    public Map<String, Object> nonLCCHolding(JSONObject booking) {
-        Map<String, Object> result = new LinkedHashMap<>();
-
-        result.put("isPriceChanged", booking.getBoolean("IsPriceChanged"));
-        result.put("isTimeChanged", booking.getBoolean("IsTimeChanged"));
-        result.put("bookingId", booking.getBigInteger("BookingId"));
-        result.put("PNR", booking.getString("PNR"));
-
-        Map<String, Object> bookingMap = new LinkedHashMap<>();
-        JSONObject bookingObj = booking.getJSONObject("FlightItinerary");
-        bookingMap.put("origin", bookingObj.getString("Origin"));
-        bookingMap.put("destination", bookingObj.getString("Destination"));
-        bookingMap.put("isManual", bookingObj.getBoolean("IsManual"));
-        bookingMap.put("bookingAllowedForRoamer", bookingObj.getBoolean("BookingAllowedForRoamer"));
-        bookingMap.put("fareType", bookingObj.getString("FareType"));
-        bookingMap.put("validatingAirlineCode", bookingObj.getString("ValidatingAirlineCode"));
-        bookingMap.put("nonRefundable", bookingObj.getBoolean("NonRefundable"));
-        bookingMap.put("isDomestic", bookingObj.getBoolean("IsDomestic"));
-        bookingMap.put("airlineCode", bookingObj.getString("AirlineCode"));
-        bookingMap.put("tripIndicator", bookingObj.getInt("TripIndicator"));
-        //bookingMap.put("cancellationCharges", "CancellationCharges");
-        bookingMap.put("fare", setFare(bookingObj.getJSONObject("Fare")));
-        bookingMap.put("fareRules", setFareRule(bookingObj.getJSONArray("FareRules")));
-
-        JSONArray segments = bookingObj.getJSONArray("Segments");
+    private List<Map<String, Object>> getBookingSegments(JSONArray segments) {
         List<Map<String, Object>> segmentsList = new LinkedList<>();
         for (int i = 0; i < segments.length(); i++) {
             Map<String, Object> segmentMap = new LinkedHashMap<>();
@@ -246,17 +224,17 @@ public abstract class ModelBindingUtil {
             segmentMap.put("groundTime", segmentObj.getInt("GroundTime"));
             segmentMap.put("stopOver", segmentObj.getBoolean("StopOver"));
 
-            if (!segmentObj.isNull("Baggage"))
+            if (segmentObj.has("Baggage") && !segmentObj.isNull("Baggage"))
                 segmentMap.put("baggage", segmentObj.get("Baggage"));
             else
                 segmentMap.put("baggage", null);
 
-            if (!segmentObj.isNull("CabinBaggage"))
+            if (segmentObj.has("CabinBaggage") && !segmentObj.isNull("CabinBaggage"))
                 segmentMap.put("cabinBaggage", segmentObj.get("CabinBaggage"));
             else
                 segmentMap.put("cabinBaggage", null);
 
-            if (!segmentObj.isNull("Remark"))
+            if (segmentObj.has("Remark") && !segmentObj.isNull("Remark"))
                 segmentMap.put("remark", segmentObj.getString("Remark"));
             else
                 segmentMap.put("remark", null);
@@ -275,14 +253,36 @@ public abstract class ModelBindingUtil {
             destination.put("terminal", segmentObj.getJSONObject("Destination").getJSONObject("Airport").getString("Terminal"));
             segmentMap.put("destination", destination);
 
-            segmentMap.put("airlineName", segmentObj.getJSONObject("Airline").getString("AirlineName"));
+            Map<String, Object> airline = new LinkedHashMap<>();
+            airline.put("airlineCode", segmentObj.getJSONObject("Airline").getString("AirlineCode"));
+            airline.put("airlineName", segmentObj.getJSONObject("Airline").getString("AirlineName"));
+            segmentMap.put("airline", airline);
+
             segmentMap.put("flightNumber", segmentObj.getJSONObject("Airline").getString("FlightNumber"));
             segmentMap.put("fareClass", segmentObj.getJSONObject("Airline").getString("FareClass"));
+
             segmentsList.add(segmentMap);
         }
-        bookingMap.put("segments", segmentsList);
 
-        JSONArray passenger = bookingObj.getJSONArray("Passenger");
+        return segmentsList;
+    }
+
+    private Map<String, Object> getTicket(JSONObject ticket) {
+        Map<String, Object> ticketMap = new LinkedHashMap<>();
+
+        ticketMap.put("ticketId", ticket.getBigInteger("TicketId"));
+        ticketMap.put("ticketNumber", ticket.getString("TicketNumber"));
+        ticketMap.put("issueDate", ticket.getString("IssueDate"));
+        ticketMap.put("validatingAirline", ticket.getString("ValidatingAirline"));
+        ticketMap.put("remarks", ticket.getString("Remarks"));
+        ticketMap.put("serviceFeeDisplayType", ticket.getString("ServiceFeeDisplayType"));
+        ticketMap.put("conjunctionNumber", ticket.getString("ConjunctionNumber"));
+        ticketMap.put("ticketType", ticket.getString("TicketType"));
+        return ticketMap;
+    }
+
+    private List<Map<String, Object>> getPassengerList(JSONArray passenger) {
+
         List<Map<String, Object>> passengerList = new LinkedList<>();
         for (int j = 0; j < passenger.length(); j++) {
             JSONObject passengerObj = passenger.getJSONObject(j);
@@ -294,7 +294,10 @@ public abstract class ModelBindingUtil {
             passengerMap.put("firstName", passengerObj.getString("FirstName"));
             passengerMap.put("lastName", passengerObj.getString("LastName"));
             passengerMap.put("passportNo", passengerObj.getString("PassportNo"));
-            passengerMap.put("passportExpiry", passengerObj.getString("PassportExpiry"));
+
+            if (passengerObj.has("PassportExpiry"))
+                passengerMap.put("passportExpiry", passengerObj.getString("PassportExpiry"));
+
             passengerMap.put("nationality", passengerObj.getString("Nationality"));
             passengerMap.put("gender", passengerObj.getInt("Gender"));
             passengerMap.put("countryName", passengerObj.getString("CountryName"));
@@ -302,21 +305,60 @@ public abstract class ModelBindingUtil {
             passengerMap.put("paxType", passengerObj.getInt("PaxType"));
 
             //passengerMap.put("ssr", passengerObj.getJSONArray("Ssr"));
+            //passengerMap.put("segmentAdditionalInfo", passengerObj.getJSONArray("SegmentAdditionalInfo"));
             passengerMap.put("fare", setFare(passengerObj.getJSONObject("Fare")));
 
-            if (!passengerObj.isNull("FFNumber"))
+            if (passengerObj.has("FFNumber") && !passengerObj.isNull("FFNumber"))
                 passengerMap.put("FFNumber", passengerObj.getString("FFNumber"));
             else
                 passengerMap.put("FFNumber", null);
 
-            if (!passengerObj.isNull("FFAirlineCode"))
+            if (passengerObj.has("FFAirlineCode") && !passengerObj.isNull("FFAirlineCode"))
                 passengerMap.put("FFAirlineCode", passengerObj.getString("FFAirlineCode"));
             else
                 passengerMap.put("FFAirlineCode", null);
 
+            if (passengerObj.has("Fare") && !passengerObj.isNull("Fare"))
+                passengerMap.put("fare", setFare(passengerObj.getJSONObject("Fare")));
+
+            if (passengerObj.has("Ticket") && !passengerObj.isNull("Ticket"))
+                passengerMap.put("ticket", getTicket(passengerObj.getJSONObject("Ticket")));
+
             passengerList.add(passengerMap);
         }
-        bookingMap.put("passengers", passengerList);
+        return passengerList;
+    }
+
+    public Map<String, Object> nonLCCHolding(JSONObject booking) {
+        Map<String, Object> result = new LinkedHashMap<>();
+
+        result.put("isPriceChanged", booking.getBoolean("IsPriceChanged"));
+        result.put("isTimeChanged", booking.getBoolean("IsTimeChanged"));
+        result.put("bookingId", booking.getBigInteger("BookingId"));
+        result.put("PNR", booking.getString("PNR"));
+        //result.put("bookingStatus", "");
+
+        Map<String, Object> bookingMap = new LinkedHashMap<>();
+        JSONObject bookingObj = booking.getJSONObject("FlightItinerary");
+
+        bookingMap.put("origin", bookingObj.getString("Origin"));
+        bookingMap.put("destination", bookingObj.getString("Destination"));
+        bookingMap.put("isManual", bookingObj.getBoolean("IsManual"));
+        bookingMap.put("bookingAllowedForRoamer", bookingObj.getBoolean("BookingAllowedForRoamer"));
+        bookingMap.put("fareType", bookingObj.getString("FareType"));
+        bookingMap.put("validatingAirlineCode", bookingObj.getString("ValidatingAirlineCode"));
+        bookingMap.put("nonRefundable", bookingObj.getBoolean("NonRefundable"));
+        bookingMap.put("isDomestic", bookingObj.getBoolean("IsDomestic"));
+        bookingMap.put("airlineCode", bookingObj.getString("AirlineCode"));
+        //bookingMap.put("cancellationCharges", "CancellationCharges");
+
+        bookingMap.put("fare", setFare(bookingObj.getJSONObject("Fare")));
+
+        bookingMap.put("fareRules", setFareRule(bookingObj.getJSONArray("FareRules")));
+
+        bookingMap.put("segments", getBookingSegments(bookingObj.getJSONArray("Segments")));
+
+        bookingMap.put("passengers", getPassengerList(bookingObj.getJSONArray("Passenger")));
 
         result.put("booking", bookingMap);
         return result;
@@ -325,7 +367,48 @@ public abstract class ModelBindingUtil {
     public Map<String, Object> getTicketResponse(JSONObject ticket) {
         Map<String, Object> result = new LinkedHashMap<>();
 
-        result.put("ticket", ticket.toMap());
+      /*"SSRDenied":false,
+        "SSRMessage":null,*/
+        result.put("PNR", ticket.getString("PNR"));
+        result.put("bookingId", ticket.getBigInteger("BookingId"));
+        result.put("isPriceChanged", ticket.getBoolean("IsPriceChanged"));
+        result.put("isTimeChanged", ticket.getBoolean("IsTimeChanged"));
+        result.put("ticketStatus", TicketStatus.getStatus(ticket.getInt("TicketStatus")));
+
+        Map<String, Object> ticketMap = new LinkedHashMap<>();
+
+        JSONObject ticketObj = ticket.getJSONObject("FlightItinerary");
+        System.out.println("Status :" + ticketObj.getInt("Status"));
+        result.put("bookingStatus", BookingStatus.getStatus(ticketObj.getInt("Status")));
+
+        ticketMap.put("origin", ticketObj.getString("Origin"));
+        ticketMap.put("destination", ticketObj.getString("Destination"));
+        ticketMap.put("isManual", ticketObj.getBoolean("IsManual"));
+        ticketMap.put("bookingAllowedForRoamer", ticketObj.getBoolean("BookingAllowedForRoamer"));
+        ticketMap.put("isDomestic", ticketObj.getBoolean("IsDomestic"));
+        ticketMap.put("isLCC", ticketObj.getBoolean("IsLCC"));
+        ticketMap.put("nonRefundable", ticketObj.getBoolean("NonRefundable"));
+        ticketMap.put("airlineCode", ticketObj.getString("AirlineCode"));
+        ticketMap.put("airlineTollFreeNo", ticketObj.getString("AirlineTollFreeNo"));
+        ticketMap.put("fareType", ticketObj.getString("FareType"));
+        //ticketMap.put("cancellationCharges", "CancellationCharges");
+
+        ticketMap.put("fare", setFare(ticketObj.getJSONObject("Fare")));
+
+        ticketMap.put("fareRules", setFareRule(ticketObj.getJSONArray("FareRules")));
+
+        Map<String, Object> invoiceMap = new LinkedHashMap<>();
+        invoiceMap.put("invoiceAmount", ticketObj.getBigDecimal("InvoiceAmount"));
+        invoiceMap.put("invoiceNo", ticketObj.getString("InvoiceNo"));
+        //invoiceMap.put("InvoiceStatus", ticketObj.getInt("InvoiceStatus"));
+        invoiceMap.put("invoiceCreatedOn", ticketObj.getString("InvoiceCreatedOn"));
+        ticketMap.put("invoice", invoiceMap);
+
+        ticketMap.put("segments", getBookingSegments(ticketObj.getJSONArray("Segments")));
+
+        ticketMap.put("passengers", getPassengerList(ticketObj.getJSONArray("Passenger")));
+
+        result.put("ticket", ticketMap);
         return result;
     }
 
