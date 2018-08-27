@@ -40,4 +40,45 @@ public enum BookingStatus {
             return BookingStatus.STATUS_ERROR;
         }
     }
+
+    public static BookingStatus from(String status) {
+        if (status.equalsIgnoreCase("NOT_SET") || status.equalsIgnoreCase("NOT SET")) {
+            return BookingStatus.NOT_SET;
+        } else if (status.equalsIgnoreCase("SUCCESSFUL")) {
+            return BookingStatus.SUCCESSFUL;
+        } else if (status.equalsIgnoreCase("FAILED")) {
+            return BookingStatus.FAILED;
+        } else if (status.equalsIgnoreCase("OTHER FARE") || status.equalsIgnoreCase("OTHER_FARE")) {
+            return BookingStatus.OTHER_FARE;
+        } else if (status.equalsIgnoreCase("OTHER CLASS") || status.equalsIgnoreCase("OTHER_CLASS")) {
+            return BookingStatus.OTHER_CLASS;
+        } else if (status.equalsIgnoreCase("BOOKED OTHER") || status.equalsIgnoreCase("BOOKED_OTHER")) {
+            return BookingStatus.BOOKED_OTHER;
+        } else if (status.equalsIgnoreCase("NOT CONFIRMED") || status.equalsIgnoreCase("NOT_CONFIRMED")) {
+            return BookingStatus.NOT_CONFIRMED;
+        } else {
+            return BookingStatus.STATUS_ERROR;
+        }
+    }
+
+    @Override
+    public String toString() {
+        if (statusCode == 0) {
+            return "NOT SET";
+        } else if (statusCode == 1) {
+            return "SUCCESSFUL";
+        } else if (statusCode == 2) {
+            return "FAILED";
+        } else if (statusCode == 3) {
+            return "OTHER FARE";
+        } else if (statusCode == 4) {
+            return "OTHER CLASS";
+        } else if (statusCode == 5) {
+            return "BOOKED OTHER";
+        } else if (statusCode == 6) {
+            return "NOT CONFIRMED";
+        } else {
+            return "STATUS ERROR";
+        }
+    }
 }

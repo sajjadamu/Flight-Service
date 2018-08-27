@@ -5,6 +5,7 @@ import com.jck.travel.flight.config.ApplicationConfig;
 import com.jck.travel.flight.model.Error;
 import com.jck.travel.flight.model.Response;
 import com.jck.travel.flight.model.co.*;
+import com.jck.travel.flight.model.co.booking_engine.ReservationCo;
 import com.jck.travel.flight.model.dto.util.ModelBindingUtil;
 import com.jck.travel.flight.service.FactoryService;
 import com.jck.travel.flight.service.RedisClientService;
@@ -177,7 +178,19 @@ public class FactoryServiceImpl extends ModelBindingUtil implements FactoryServi
             restService.setResponse(restService.sendPostRequest(config.getTboBookingHoldingPath(), bookingCo.getTboServiceRequest(String.valueOf(jsonObject.get("tokenId")), String.valueOf(jsonObject.get("traceId")))));
 
             if (restService.getHttpStatus().equals(Status.OK)) {
-                return Response.setSuccessResponse(Status.OK, bookingCo.getTokenId(), super.nonLCCHolding(restService.getResponse().getJSONObject("booking")));
+                Map<String, Object> booking = super.nonLCCHolding(restService.getResponse().getJSONObject("booking"));
+                ReservationCo reservationCo = new ReservationCo();
+                reservationCo.setRequest(new JSONObject(new Gson().toJson(booking)), true);
+
+                System.out.println("Holding to be save:" + new JSONObject(new Gson().toJson(reservationCo)));
+                restService.setResponse(restService.sendPostRequest(config.getPnrHoldingPath(), new JSONObject(new Gson().toJson(reservationCo))));
+
+                if (restService.getHttpStatus().equals(Status.OK)) {
+                    return Response.setSuccessResponse(Status.OK, bookingCo.getTokenId(), booking);
+                } else {
+                    System.out.println(" Error : Holding Save Fail");
+                    return Response.setErrorResponse(restService.getHttpStatus(), bookingCo.getTokenId(), restService.getError());
+                }
             } else {
                 return Response.setErrorResponse(restService.getHttpStatus(), bookingCo.getTokenId(), restService.getError());
             }
@@ -200,7 +213,22 @@ public class FactoryServiceImpl extends ModelBindingUtil implements FactoryServi
             restService.setResponse(restService.sendPostRequest(config.getTboFlightTicketPath(), ticketCo.getTboServiceRequest(String.valueOf(jsonObject.get("tokenId")), String.valueOf(jsonObject.get("traceId")))));
 
             if (restService.getHttpStatus().equals(Status.OK)) {
-                return Response.setSuccessResponse(Status.OK, ticketCo.getTokenId(), super.getTicketResponse(restService.getResponse().getJSONObject("ticket")));
+                Map<String, Object> ticket = super.getTicketResponse(restService.getResponse().getJSONObject("ticket"));
+                System.out.println("Ticket Before save:" + new JSONObject(new Gson().toJson(ticket)));
+
+                ReservationCo reservationCo = new ReservationCo();
+                reservationCo.setRequest(new JSONObject(new Gson().toJson(ticket)), false);
+
+                System.out.println("Ticket to be save:" + new JSONObject(new Gson().toJson(reservationCo)));
+                restService.setResponse(restService.sendPostRequest(config.getSaveTicketPath(), new JSONObject(new Gson().toJson(reservationCo))));
+
+                if (restService.getHttpStatus().equals(Status.OK)) {
+                    System.out.println("Successful : " + restService.getResponse());
+                    return Response.setSuccessResponse(Status.OK, ticketCo.getTokenId(), ticket);
+                } else {
+                    System.out.println(" Error : Ticket Save Fail");
+                    return Response.setErrorResponse(restService.getHttpStatus(), ticketCo.getTokenId(), restService.getError());
+                }
             } else {
                 return Response.setErrorResponse(restService.getHttpStatus(), ticketCo.getTokenId(), restService.getError());
             }

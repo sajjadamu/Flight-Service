@@ -13,6 +13,8 @@ public interface RestService {
 
     public JSONObject sendPostRequest(String url, Map<String, ?> queryParams) throws ServiceBlockerFoundException;
 
+    public JSONObject sendPostRequest(String url, JSONObject queryParams) throws ServiceBlockerFoundException;
+
     public ResponseEntity<String> sendGetRequest(String url, Map<String, ?> queryParams) throws ServiceBlockerFoundException;
 
     public ResponseEntity<String> sendGetRequest(String url) throws ServiceBlockerFoundException;

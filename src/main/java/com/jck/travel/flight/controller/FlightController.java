@@ -71,7 +71,6 @@ public class FlightController {
         return factoryService.getFareQuote(fareQuoteCo);
     }
 
-/*
     @RequestMapping(value = "/ssr", method = RequestMethod.POST, consumes = "application/json")
     public Response meal_baggageInfo(@RequestBody @Valid FareQuoteCo fareQuoteCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException {
 
@@ -83,7 +82,6 @@ public class FlightController {
 
         return new Response();
     }
-*/
 
     @RequestMapping(value = "/holding", method = RequestMethod.POST, consumes = "application/json")
     public Response makeBooking(@RequestBody @Valid BookingCo bookingCo, BindingResult bindingResult, HttpServletRequest request) throws BadRequestException, ParseException, JSONResponseNotFoundException, ServiceBlockerFoundException {

@@ -46,7 +46,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         if (httpEx != null)
             httpEx.printStackTrace();
 
-        return Error.setErrorResponse(null, ErrorCode.UNAUTHORIZED.getCode(), "Authentication Fail.");
+        return Error.setErrorResponse(null, ErrorCode.UNAUTHORIZED.getCode(), "Request processing getting failed.");
     }
 
     @ExceptionHandler(SearchAlreadyExistException.class)

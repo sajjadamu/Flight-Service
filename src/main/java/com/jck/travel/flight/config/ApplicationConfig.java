@@ -30,8 +30,22 @@ public class ApplicationConfig {
     @Value("${tbo.service.flight.ticket.path}")
     private String tboFlightTicketPath;
 
+    @Value("${booking.engine.service.flight.ticket.path}")
+    private String saveTicketPath;
+
+    @Value("${booking.engine.service.flight.booking.holding.path}")
+    private String pnrHoldingPath;
+
     @Value("${redis.service.token.cache}")
     private String redisTokenCachePath;
+
+    public String getSaveTicketPath() {
+        return saveTicketPath;
+    }
+
+    public String getPnrHoldingPath() {
+        return pnrHoldingPath;
+    }
 
     public String getTboFlightTicketPath() {
         return tboFlightTicketPath;

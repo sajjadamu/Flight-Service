@@ -6,6 +6,7 @@ import com.jck.travel.flight.service.RestService;
 import com.jck.travel.flight.util.enumeration.Status;
 import com.jck.travel.flight.util.exception.JSONResponseNotFoundException;
 import com.jck.travel.flight.util.exception.ServiceBlockerFoundException;
+import io.micrometer.core.lang.NonNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.context.annotation.Scope;
@@ -41,6 +42,17 @@ public class RestServiceImpl implements RestService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         try {
             return new JSONObject(new RestTemplate().postForObject(url, new HttpEntity<>(new Gson().toJson(queryParams), headers), String.class));
+        } catch (HttpServerErrorException ex) {
+            throw new ServiceBlockerFoundException("Some resource is not available");
+        }
+    }
+
+    @Override
+    public JSONObject sendPostRequest(String url, @NonNull JSONObject queryParams) throws ServiceBlockerFoundException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        try {
+            return new JSONObject(new RestTemplate().postForObject(url, new HttpEntity<>(queryParams.toString(), headers), String.class));
         } catch (HttpServerErrorException ex) {
             throw new ServiceBlockerFoundException("Some resource is not available");
         }

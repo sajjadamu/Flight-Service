@@ -240,7 +240,7 @@ public abstract class ModelBindingUtil {
                 segmentMap.put("remark", null);
 
             Map<String, Object> origin = new LinkedHashMap<>();
-            origin.put("AirportCode", segmentObj.getJSONObject("Origin").getJSONObject("Airport").getString("AirportCode"));
+            origin.put("airportCode", segmentObj.getJSONObject("Origin").getJSONObject("Airport").getString("AirportCode"));
             origin.put("originDepTime", segmentObj.getJSONObject("Origin").getString("DepTime"));
             origin.put("airportName", segmentObj.getJSONObject("Origin").getJSONObject("Airport").getString("AirportName"));
             origin.put("terminal", segmentObj.getJSONObject("Origin").getJSONObject("Airport").getString("Terminal"));
@@ -248,7 +248,7 @@ public abstract class ModelBindingUtil {
 
             Map<String, Object> destination = new LinkedHashMap<>();
             destination.put("destinationArrTime", segmentObj.getJSONObject("Destination").getString("ArrTime"));
-            destination.put("AirportCode", segmentObj.getJSONObject("Destination").getJSONObject("Airport").getString("AirportCode"));
+            destination.put("airportCode", segmentObj.getJSONObject("Destination").getJSONObject("Airport").getString("AirportCode"));
             destination.put("airportName", segmentObj.getJSONObject("Destination").getJSONObject("Airport").getString("AirportName"));
             destination.put("terminal", segmentObj.getJSONObject("Destination").getJSONObject("Airport").getString("Terminal"));
             segmentMap.put("destination", destination);
@@ -300,8 +300,18 @@ public abstract class ModelBindingUtil {
 
             passengerMap.put("nationality", passengerObj.getString("Nationality"));
             passengerMap.put("gender", passengerObj.getInt("Gender"));
-            passengerMap.put("countryName", passengerObj.getString("CountryName"));
-            passengerMap.put("countryCode", passengerObj.getString("CountryCode"));
+
+            if (passengerObj.has("CountryName") && !passengerObj.isNull("CountryName"))
+                passengerMap.put("countryName", passengerObj.getString("CountryName"));
+            else
+                passengerMap.put("countryName", null);
+
+
+            if (passengerObj.has("CountryCode") && !passengerObj.isNull("CountryCode"))
+                passengerMap.put("countryCode", passengerObj.getString("CountryCode"));
+            else
+                passengerMap.put("countryCode", null);
+
             passengerMap.put("paxType", passengerObj.getInt("PaxType"));
 
             //passengerMap.put("ssr", passengerObj.getJSONArray("Ssr"));
@@ -336,7 +346,7 @@ public abstract class ModelBindingUtil {
         result.put("isTimeChanged", booking.getBoolean("IsTimeChanged"));
         result.put("bookingId", booking.getBigInteger("BookingId"));
         result.put("PNR", booking.getString("PNR"));
-        //result.put("bookingStatus", "");
+        result.put("status", BookingStatus.getStatus(booking.getInt("Status")));
 
         Map<String, Object> bookingMap = new LinkedHashMap<>();
         JSONObject bookingObj = booking.getJSONObject("FlightItinerary");
@@ -378,9 +388,8 @@ public abstract class ModelBindingUtil {
         Map<String, Object> ticketMap = new LinkedHashMap<>();
 
         JSONObject ticketObj = ticket.getJSONObject("FlightItinerary");
-        System.out.println("Status :" + ticketObj.getInt("Status"));
-        result.put("bookingStatus", BookingStatus.getStatus(ticketObj.getInt("Status")));
 
+        result.put("bookingStatus", BookingStatus.getStatus(ticketObj.getInt("Status")));
         ticketMap.put("origin", ticketObj.getString("Origin"));
         ticketMap.put("destination", ticketObj.getString("Destination"));
         ticketMap.put("isManual", ticketObj.getBoolean("IsManual"));
@@ -389,7 +398,12 @@ public abstract class ModelBindingUtil {
         ticketMap.put("isLCC", ticketObj.getBoolean("IsLCC"));
         ticketMap.put("nonRefundable", ticketObj.getBoolean("NonRefundable"));
         ticketMap.put("airlineCode", ticketObj.getString("AirlineCode"));
-        ticketMap.put("airlineTollFreeNo", ticketObj.getString("AirlineTollFreeNo"));
+
+        if (ticketObj.has("AirlineTollFreeNo"))
+            ticketMap.put("airlineTollFreeNo", ticketObj.getString("AirlineTollFreeNo"));
+        else
+            ticketMap.put("airlineTollFreeNo", "");
+
         ticketMap.put("fareType", ticketObj.getString("FareType"));
         //ticketMap.put("cancellationCharges", "CancellationCharges");
 
