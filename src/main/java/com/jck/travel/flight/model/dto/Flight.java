@@ -1,6 +1,5 @@
 package com.jck.travel.flight.model.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jck.travel.flight.model.dto.util.Searchable;
 import com.jck.travel.flight.model.dto.util.Sortable;
@@ -40,7 +39,7 @@ public class Flight implements Sortable<Flight>, Searchable<Flight> {
 
     private String airLineName;
 
-    private List<Segment> segments = new ArrayList<>();
+    private List<List<Segment>> segments = new ArrayList<>();
 
     private Fare fares;
 
@@ -152,11 +151,11 @@ public class Flight implements Sortable<Flight>, Searchable<Flight> {
         this.airLineName = airLineName;
     }
 
-    public List<Segment> getSegments() {
+    public List<List<Segment>> getSegments() {
         return segments;
     }
 
-    public void setSegments(Segment segment) {
+    public void setSegments(List<Segment> segment) {
         if (segment != null)
             this.segments.add(segment);
     }

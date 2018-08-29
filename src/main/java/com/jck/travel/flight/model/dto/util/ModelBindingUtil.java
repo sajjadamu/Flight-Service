@@ -55,6 +55,7 @@ public abstract class ModelBindingUtil {
         for (int s = 0; s < segments.length(); s++) {
 
             JSONArray segmentWay = segments.getJSONArray(s);
+            List<Segment> segmentList = new ArrayList<>();
             for (int sw = 0; sw < segmentWay.length(); sw++) {
                 JSONObject segmentDetails = segmentWay.getJSONObject(sw);
 
@@ -82,9 +83,9 @@ public abstract class ModelBindingUtil {
                 segment.setTripIndicator(String.valueOf(segmentDetails.getInt("TripIndicator")));
                 segment.setDuration(String.valueOf(segmentDetails.getInt("Duration")));
                 //segment.setNoOfSeatAvailable(segmentDetails.getInt("NoOfSeatAvailable"));
-
-                flight.setSegments(segment);
+                segmentList.add(segment);
             }
+            flight.setSegments(segmentList);
         }
 
         // Set fare in flight object
