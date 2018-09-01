@@ -82,8 +82,18 @@ public class Fare {
     private String platingCarrier;
 
     private FareBreakDown fareBreakDown;
+    
+    private String cancelationCharges;
 
-    public String getId() {
+    public String getCancelationCharges() {
+		return cancelationCharges;
+	}
+
+	public void setCancelationCharges(String cancelationCharges) {
+		this.cancelationCharges = cancelationCharges;
+	}
+
+	public String getId() {
         return id;
     }
 

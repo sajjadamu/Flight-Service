@@ -1,203 +1,227 @@
 package com.jck.travel.flight.model.dto;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jck.travel.flight.model.dto.util.Searchable;
 import com.jck.travel.flight.model.dto.util.Sortable;
 import com.jck.travel.flight.util.enumeration.FlightSource;
 import com.jck.travel.flight.util.enumeration.SourcePriority;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Flight implements Sortable<Flight>, Searchable<Flight> {
 
-    private String id; // In TBO(ResultIndex), In Galileo(Key)
+	private String id; // In TBO(ResultIndex), In Galileo(Key)
 
-    private FlightSource source;
+	private String duration;
 
-    private SourcePriority priority;
+	private String price;
 
-    @JsonIgnore
-    private boolean isEnabled;
+	private FlightSource source;
 
-    private boolean isRefundable;
+	private String baggage;
 
-    private boolean isGSTMandatory;
+	private boolean isMeal;
 
-    private boolean isGSTAllowed;
+	public String getDuration() {
+		return duration;
+	}
 
-    private boolean isLCC;
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
 
-    private BigInteger travelTime;
+	public String getPrice() {
+		return price;
+	}
 
-    private String originTerminal; // for galileo
+	public void setPrice(String price) {
+		this.price = price;
+	}
 
-    private String destinationTerminal; // for galileo
+	public String getBaggage() {
+		return baggage;
+	}
 
-    private String airLineCode;
+	public void setBaggage(String baggage) {
+		this.baggage = baggage;
+	}
 
-    private String airLineName;
+	public boolean isMeal() {
+		return isMeal;
+	}
 
-    private List<List<Segment>> segments = new ArrayList<>();
+	public void setMeal(boolean isMeal) {
+		this.isMeal = isMeal;
+	}
 
-    private Fare fares;
+	public void setFareRules(List<FareRule> fareRules) {
+		this.fareRules = fareRules;
+	}
 
-    private List<FareRule> fareRules = new ArrayList<>();
+	public void setFareBreakDowns(List<FareBreakDown> fareBreakDowns) {
+		this.fareBreakDowns = fareBreakDowns;
+	}
 
-    private List<FareBreakDown> fareBreakDowns = new ArrayList<>();
+	private SourcePriority priority;
 
-    public String getId() {
-        return id;
-    }
+	@JsonIgnore
+	private boolean isEnabled;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	private boolean isRefundable;
 
-    public FlightSource getSource() {
-        return source;
-    }
+	private boolean isGSTMandatory;
 
-    public void setSource(FlightSource source) {
-        this.source = source;
-    }
+	private boolean isGSTAllowed;
 
-    public SourcePriority getPriority() {
-        return priority;
-    }
+	private boolean isLCC;
 
-    public void setPriority(SourcePriority priority) {
-        this.priority = priority;
-    }
+	private BigInteger travelTime;
 
-    public boolean isEnabled() {
-        return isEnabled;
-    }
+	private String airLineCode;
 
-    public void setEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
-    }
+	private String airLineName;
 
-    public boolean isRefundable() {
-        return isRefundable;
-    }
+	private List<List<Segment>> segments = new ArrayList<>();
 
-    public void setRefundable(boolean isRefundable) {
-        this.isRefundable = isRefundable;
-    }
+	private Fare fares;
 
-    public boolean isGSTMandatory() {
-        return isGSTMandatory;
-    }
+	private List<FareRule> fareRules = new ArrayList<>();
 
-    public void setGSTMandatory(boolean isGSTMandatory) {
-        this.isGSTMandatory = isGSTMandatory;
-    }
+	private List<FareBreakDown> fareBreakDowns = new ArrayList<>();
 
-    public boolean isGSTAllowed() {
-        return isGSTAllowed;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setGSTAllowed(boolean isGSTAllowed) {
-        this.isGSTAllowed = isGSTAllowed;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public boolean isLCC() {
-        return isLCC;
-    }
+	public FlightSource getSource() {
+		return source;
+	}
 
-    public void setLCC(boolean isLCC) {
-        this.isLCC = isLCC;
-    }
+	public void setSource(FlightSource source) {
+		this.source = source;
+	}
 
-    public BigInteger getTravelTime() {
-        return travelTime;
-    }
+	public SourcePriority getPriority() {
+		return priority;
+	}
 
-    public void setTravelTime(BigInteger travelTime) {
-        this.travelTime = travelTime;
-    }
+	public void setPriority(SourcePriority priority) {
+		this.priority = priority;
+	}
 
-    public String getOriginTerminal() {
-        return originTerminal;
-    }
+	public boolean isEnabled() {
+		return isEnabled;
+	}
 
-    public void setOriginTerminal(String originTerminal) {
-        this.originTerminal = originTerminal;
-    }
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
 
-    public String getDestinationTerminal() {
-        return destinationTerminal;
-    }
+	public boolean isRefundable() {
+		return isRefundable;
+	}
 
-    public void setDestinationTerminal(String destinationTerminal) {
-        this.destinationTerminal = destinationTerminal;
-    }
+	public void setRefundable(boolean isRefundable) {
+		this.isRefundable = isRefundable;
+	}
 
-    public String getAirLineCode() {
-        return airLineCode;
-    }
+	public boolean isGSTMandatory() {
+		return isGSTMandatory;
+	}
 
-    public void setAirLineCode(String airLineCode) {
-        this.airLineCode = airLineCode;
-    }
+	public void setGSTMandatory(boolean isGSTMandatory) {
+		this.isGSTMandatory = isGSTMandatory;
+	}
 
-    public String getAirLineName() {
-        return airLineName;
-    }
+	public boolean isGSTAllowed() {
+		return isGSTAllowed;
+	}
 
-    public void setAirLineName(String airLineName) {
-        this.airLineName = airLineName;
-    }
+	public void setGSTAllowed(boolean isGSTAllowed) {
+		this.isGSTAllowed = isGSTAllowed;
+	}
 
-    public List<List<Segment>> getSegments() {
-        return segments;
-    }
+	public boolean isLCC() {
+		return isLCC;
+	}
 
-    public void setSegments(List<Segment> segment) {
-        if (segment != null)
-            this.segments.add(segment);
-    }
+	public void setLCC(boolean isLCC) {
+		this.isLCC = isLCC;
+	}
 
-    public Fare getFares() {
-        return fares;
-    }
+	public BigInteger getTravelTime() {
+		return travelTime;
+	}
 
-    public void setFares(Fare fares) {
-        this.fares = fares;
-    }
+	public void setTravelTime(BigInteger travelTime) {
+		this.travelTime = travelTime;
+	}
 
-    public List<FareRule> getFareRules() {
-        return fareRules;
-    }
+	public String getAirLineCode() {
+		return airLineCode;
+	}
 
-    public void setFareRules(FareRule fareRule) {
-        if (fareRule != null)
-            this.fareRules.add(fareRule);
-    }
+	public void setAirLineCode(String airLineCode) {
+		this.airLineCode = airLineCode;
+	}
 
-    public List<FareBreakDown> getFareBreakDowns() {
-        return fareBreakDowns;
-    }
+	public String getAirLineName() {
+		return airLineName;
+	}
 
-    public void setFareBreakDowns(FareBreakDown fareBreakDown) {
-        if (fareBreakDown != null)
-            this.fareBreakDowns.add(fareBreakDown);
-    }
+	public void setAirLineName(String airLineName) {
+		this.airLineName = airLineName;
+	}
 
-    @Override
-    public int compareTo(Flight object) {
-        return 0;
-    }
+	public void setSegments(List<Segment> segment) {
+		if (segment != null)
+			this.segments.add(segment);
+	}
 
-    @Override
-    public int compare(Flight object1, Flight object2) {
-        return 0;
-    }
+	public Fare getFares() {
+		return fares;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        return false;
-    }
+	public void setFares(Fare fares) {
+		this.fares = fares;
+	}
+
+	public List<FareRule> getFareRules() {
+		return fareRules;
+	}
+
+	public void setFareRules(FareRule fareRule) {
+		if (fareRule != null)
+			this.fareRules.add(fareRule);
+	}
+
+	public List<FareBreakDown> getFareBreakDowns() {
+		return fareBreakDowns;
+	}
+
+	public void setFareBreakDowns(FareBreakDown fareBreakDown) {
+		if (fareBreakDown != null)
+			this.fareBreakDowns.add(fareBreakDown);
+	}
+
+	@Override
+	public int compareTo(Flight object) {
+		return 0;
+	}
+
+	@Override
+	public int compare(Flight object1, Flight object2) {
+		return 0;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		return false;
+	}
 }

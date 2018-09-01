@@ -63,8 +63,18 @@ public class Segment {
     private String availabilityDisplayType;
 
     private List<String> airProviders;
+    
+    private AirPortInfo airportDetail;
+    
+    public AirPortInfo getAirportDetail() {
+		return airportDetail;
+	}
 
-    private int group;
+	public void setAirportDetail(AirPortInfo airportDetail) {
+		this.airportDetail = airportDetail;
+	}
+
+	private int group;
 
     public Segment() {
     }

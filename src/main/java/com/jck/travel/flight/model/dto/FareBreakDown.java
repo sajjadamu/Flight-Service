@@ -17,6 +17,8 @@ public class FareBreakDown {
     private BigDecimal baseFare; // Same for TBO, Galileo
 
     private BigDecimal totalTax; //For TBO
+    
+    private BigDecimal gstAmount;
 
     private List<TaxBreakUp> taxBreakUp = new ArrayList<>(); // This properties for TBO ("YQTax","PGCharge"), and galileo gives full breakup
 
@@ -31,8 +33,18 @@ public class FareBreakDown {
     private BigDecimal additionalTxnFeeOfrd;
 
     private String currency;
+    
+    private String cancelationCharges;
 
-    public String getTotalFare() {
+    public String getCancelationCharges() {
+		return cancelationCharges;
+	}
+
+	public void setCancelationCharges(String cancelationCharges) {
+		this.cancelationCharges = cancelationCharges;
+	}
+
+	public String getTotalFare() {
         return totalFare;
     }
 
@@ -120,4 +132,12 @@ public class FareBreakDown {
     public void setId(String id) {
         this.id = id;
     }
+
+	public BigDecimal getGstAmount() {
+		return gstAmount;
+	}
+
+	public void setGstAmount(BigDecimal gstAmount) {
+		this.gstAmount = gstAmount;
+	}
 }
