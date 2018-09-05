@@ -8,7 +8,10 @@ import com.jck.travel.flight.util.enumeration.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @CrossOrigin
@@ -25,7 +28,7 @@ public class AirportController {
         List<Object> airLineList = new ArrayList<>();
         List<Airport> airports = new ArrayList<>();
 
-        List<Map<String, String>> airportViewListFromAirport = getAirportViewList(airportService.getAirport(key));
+        List<Map<String, Object>> airportViewListFromAirport = getAirportViewList(airportService.getAirport(key));
 
         if (airportViewListFromAirport.size() != 0)
             airLineList.addAll(airportViewListFromAirport);
@@ -35,7 +38,7 @@ public class AirportController {
             if (airport != null)
                 airports.add(airport);
         }
-        List<Map<String, String>> airportViewListFromCity = this.getAirportViewList(airports);
+        List<Map<String, Object>> airportViewListFromCity = this.getAirportViewList(airports);
 
         if (airportViewListFromCity.size() != 0)
             airLineList.addAll(airportViewListFromCity);
@@ -44,15 +47,20 @@ public class AirportController {
         return Response.setSuccessResponse(Status.OK, null, airportList);
     }
 
-    private List<Map<String, String>> getAirportViewList(List<Airport> airports) {
-        List<Map<String, String>> airLineList = new ArrayList<>();
+    private List<Map<String, Object>> getAirportViewList(List<Airport> airports) {
+        List<Map<String, Object>> airlineList = new ArrayList<>();
 
         for (Airport airport : airports) {
-            Map<String, String> airLineObject = new LinkedHashMap<>();
-            airLineObject.put("key",airport.getAirportCode());
-            airLineObject.put("value", airport.getCity().getCityName() + " (" + airport.getAirportCode() + ") " + airport.getCity().getCountry().getCountryName() + " <br> " + airport.getAirportName());
-            airLineList.add(airLineObject);
+            Map<String, Object> airlineObject = new HashMap<>();
+            airlineObject.put("key", airport.getAirportCode());
+
+            Map<String, String> objectDetails = new HashMap<>();
+            objectDetails.put("city", airport.getCity().getCityName());
+            objectDetails.put("country", airport.getCity().getCountry().getCountryName());
+            objectDetails.put("airportName", airport.getAirportName());
+            airlineObject.put("value", objectDetails);
+            airlineList.add(airlineObject);
         }
-        return airLineList;
+        return airlineList;
     }
 }
