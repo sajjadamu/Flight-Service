@@ -3,48 +3,41 @@ package com.jck.travel.flight.model.dto;
 
 import com.jck.travel.flight.util.enumeration.PaxType;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 public class FareBreakDown {
 
     private String id;
 
     private String totalFare;
 
-    private BigDecimal baseFare; // Same for TBO, Galileo
+    private Double baseFare; // Same for TBO, Galileo
 
-    private BigDecimal totalTax; //For TBO
-    
-    private BigDecimal gstAmount;
+    private Double totalTax; //For TBO
 
-    private List<TaxBreakUp> taxBreakUp = new ArrayList<>(); // This properties for TBO ("YQTax","PGCharge"), and galileo gives full breakup
+    private String yqTax;
+
+    private Double gstAmount;
 
     private PaxType passengerType;
 
-    private Map<String, ?> changePenalty; // For Galileo
+    private String reschedulePenalty; // In Galileo(), In TBO
 
-    private Map<String, ?> cancelPenalty; // For Galileo
-
-    private BigDecimal additionalTxnFeePub;
-
-    private BigDecimal additionalTxnFeeOfrd;
+    private String cancelPenalty; // For Galileo
 
     private String currency;
-    
-    private String cancelationCharges;
 
-    public String getCancelationCharges() {
-		return cancelationCharges;
-	}
+    private String baggageAllowance;//In TBO (Baggage in Segment) In Galileo ("fareInfo".baggageAllowance pax wise)
 
-	public void setCancelationCharges(String cancelationCharges) {
-		this.cancelationCharges = cancelationCharges;
-	}
+    private String cabinBaggage; //In TBO (CabinBaggage in segment)
 
-	public String getTotalFare() {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTotalFare() {
         return totalFare;
     }
 
@@ -52,29 +45,36 @@ public class FareBreakDown {
         this.totalFare = totalFare;
     }
 
-    public BigDecimal getBaseFare() {
+    public Double getBaseFare() {
         return baseFare;
     }
 
-    public void setBaseFare(BigDecimal baseFare) {
+    public void setBaseFare(Double baseFare) {
         this.baseFare = baseFare;
     }
 
-    public BigDecimal getTotalTax() {
+    public Double getTotalTax() {
         return totalTax;
     }
 
-    public void setTotalTax(BigDecimal totalTax) {
+    public void setTotalTax(Double totalTax) {
         this.totalTax = totalTax;
     }
 
-    public List<TaxBreakUp> getTaxBreakUp() {
-        return taxBreakUp;
+    public String getYqTax() {
+        return yqTax;
     }
 
-    public void setTaxBreakUp(TaxBreakUp taxBreakUp) {
-        if (taxBreakUp != null)
-            this.taxBreakUp.add(taxBreakUp);
+    public void setYqTax(String yqTax) {
+        this.yqTax = yqTax;
+    }
+
+    public Double getGstAmount() {
+        return gstAmount;
+    }
+
+    public void setGstAmount(Double gstAmount) {
+        this.gstAmount = gstAmount;
     }
 
     public PaxType getPassengerType() {
@@ -85,36 +85,20 @@ public class FareBreakDown {
         this.passengerType = passengerType;
     }
 
-    public Map<String, ?> getChangePenalty() {
-        return changePenalty;
+    public String getReschedulePenalty() {
+        return reschedulePenalty;
     }
 
-    public void setChangePenalty(Map<String, ?> changePenalty) {
-        this.changePenalty = changePenalty;
+    public void setReschedulePenalty(String reschedulePenalty) {
+        this.reschedulePenalty = reschedulePenalty;
     }
 
-    public Map<String, ?> getCancelPenalty() {
+    public String getCancelPenalty() {
         return cancelPenalty;
     }
 
-    public void setCancelPenalty(Map<String, ?> cancelPenalty) {
+    public void setCancelPenalty(String cancelPenalty) {
         this.cancelPenalty = cancelPenalty;
-    }
-
-    public BigDecimal getAdditionalTxnFeePub() {
-        return additionalTxnFeePub;
-    }
-
-    public void setAdditionalTxnFeePub(BigDecimal additionalTxnFeePub) {
-        this.additionalTxnFeePub = additionalTxnFeePub;
-    }
-
-    public BigDecimal getAdditionalTxnFeeOfrd() {
-        return additionalTxnFeeOfrd;
-    }
-
-    public void setAdditionalTxnFeeOfrd(BigDecimal additionalTxnFeeOfrd) {
-        this.additionalTxnFeeOfrd = additionalTxnFeeOfrd;
     }
 
     public String getCurrency() {
@@ -125,19 +109,19 @@ public class FareBreakDown {
         this.currency = currency;
     }
 
-    public String getId() {
-        return id;
+    public String getBaggageAllowance() {
+        return baggageAllowance;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBaggageAllowance(String baggageAllowance) {
+        this.baggageAllowance = baggageAllowance;
     }
 
-	public BigDecimal getGstAmount() {
-		return gstAmount;
-	}
+    public String getCabinBaggage() {
+        return cabinBaggage;
+    }
 
-	public void setGstAmount(BigDecimal gstAmount) {
-		this.gstAmount = gstAmount;
-	}
+    public void setCabinBaggage(String cabinBaggage) {
+        this.cabinBaggage = cabinBaggage;
+    }
 }
