@@ -43,13 +43,13 @@ public abstract class ModelBindingUtil {
         Flight flight = new Flight();
         JSONObject jsonFlight = flights.getJSONObject(index);
 
-        flight.setId(jsonFlight.getString("ResultIndex"));
-        flight.setRefundable(jsonFlight.getBoolean("IsRefundable"));
+        //flight.setId(jsonFlight.getString("ResultIndex"));
+        //flight.setRefundable(jsonFlight.getBoolean("IsRefundable"));
         //flight.setSource(jsonFlight.getString("ResultIndex")); Need to set Source for JCK
         //flight.setPriority(); Need to set priority for JCK
-        flight.setGSTMandatory(jsonFlight.getBoolean("IsGSTMandatory"));
-        flight.setGSTAllowed(jsonFlight.getBoolean("GSTAllowed"));
-        flight.setLCC(jsonFlight.getBoolean("IsLCC"));
+        //flight.setGSTMandatory(jsonFlight.getBoolean("IsGSTMandatory"));
+        //flight.setGSTAllowed(jsonFlight.getBoolean("GSTAllowed"));
+        //flight.setLCC(jsonFlight.getBoolean("IsLCC"));
 
         JSONArray segments = jsonFlight.getJSONArray("Segments");
         for (int s = 0; s < segments.length(); s++) {
@@ -66,59 +66,50 @@ public abstract class ModelBindingUtil {
                 segment.setDestination(segmentDetails.getJSONObject("Destination").getJSONObject("Airport").getString("AirportCode"));
                 segment.setETicketEligible(segmentDetails.getBoolean("IsETicketEligible"));
                 //segment.setCabinBaggage(segmentDetails.getString("CabinBaggage"));
-                segment.setAirlineCode(segmentDetails.getJSONObject("Airline").getString("AirlineCode"));
-                segment.setAirlineName(segmentDetails.getJSONObject("Airline").getString("AirlineName"));
-                segment.setFlightNumber(segmentDetails.getJSONObject("Airline").getString("FlightNumber"));
+                //segment.setAirlineCode(segmentDetails.getJSONObject("Airline").getString("AirlineCode"));
+                //segment.setAirlineName(segmentDetails.getJSONObject("Airline").getString("AirlineName"));
+                //segment.setFlightNumber(segmentDetails.getJSONObject("Airline").getString("FlightNumber"));
                 segment.setEquipment(segmentDetails.getString("Craft"));
-                segment.setFlightStatus(segmentDetails.getString("FlightStatus"));
-                segment.setSegmentIndicator(String.valueOf(segmentDetails.getInt("SegmentIndicator")));
+                //segment.setFlightStatus(segmentDetails.getString("FlightStatus"));
+                //segment.setSegmentIndicator(String.valueOf(segmentDetails.getInt("SegmentIndicator")));
 
-                if (!segmentDetails.isNull("Baggage"))
-                    segment.setBaggage(segmentDetails.getString("Baggage"));
-                else
-                    segment.setBaggage(null);
+                //if (!segmentDetails.isNull("Baggage"))
+                   // segment.setBaggage(segmentDetails.getString("Baggage"));
+                //else
+                 //   segment.setBaggage(null);
 
-                segment.setTripIndicator(String.valueOf(segmentDetails.getInt("TripIndicator")));
-                segment.setFareClass(segmentDetails.getJSONObject("Airline").getString("FareClass"));
-                segment.setTripIndicator(String.valueOf(segmentDetails.getInt("TripIndicator")));
-                segment.setDuration(String.valueOf(segmentDetails.getInt("Duration")));
+               // segment.setTripIndicator(String.valueOf(segmentDetails.getInt("TripIndicator")));
+               // segment.setFareClass(segmentDetails.getJSONObject("Airline").getString("FareClass"));
+             //   segment.setTripIndicator(String.valueOf(segmentDetails.getInt("TripIndicator")));
+                //segment.setDuration(String.valueOf(segmentDetails.getInt("Duration")));
                 //segment.setNoOfSeatAvailable(segmentDetails.getInt("NoOfSeatAvailable"));
                 segmentList.add(segment);
             }
-            flight.setSegments(segmentList);
+           // flight.setSegments(segmentList);
         }
 
         // Set fare in flight object
         List<FareRule> jsonFareRule = setFareRule(jsonFlight.getJSONArray("FareRules"));
         for (FareRule aJsonFareRule : jsonFareRule) {
-            flight.setFareRules(aJsonFareRule);
+         //   flight.setFareRules(aJsonFareRule);
         }
 
         // Set fare in flight object
-        flight.setFares(setFare(jsonFlight.getJSONObject("Fare")));
+        //flight.setFares(setFare(jsonFlight.getJSONObject("Fare")));
 
         JSONArray jsonFareBreakDown = jsonFlight.getJSONArray("FareBreakdown");
         for (int fbd = 0; fbd < jsonFareBreakDown.length(); fbd++) {
             FareBreakDown fareBreakDown = new FareBreakDown();
             JSONObject fbdObj = jsonFareBreakDown.getJSONObject(fbd);
-            fareBreakDown.setAdditionalTxnFeePub(fbdObj.getBigDecimal("AdditionalTxnFeePub"));
+            //fareBreakDown.setAdditionalTxnFeePub(fbdObj.getBigDecimal("AdditionalTxnFeePub"));
             //fareBreakDown.setPassengerType(fbdObj.getInt("PassengerType"));
-            fareBreakDown.setAdditionalTxnFeeOfrd(fbdObj.getBigDecimal("AdditionalTxnFeeOfrd"));
+            //fareBreakDown.setAdditionalTxnFeeOfrd(fbdObj.getBigDecimal("AdditionalTxnFeeOfrd"));
             fareBreakDown.setCurrency(fbdObj.getString("Currency"));
-            fareBreakDown.setBaseFare(fbdObj.getBigDecimal("BaseFare"));
-            fareBreakDown.setTotalTax(fbdObj.getBigDecimal("Tax"));
+            //fareBreakDown.setBaseFare(fbdObj.getBigDecimal("BaseFare"));
+            //fareBreakDown.setTotalTax(fbdObj.getBigDecimal("Tax"));
 
-            TaxBreakUp taxBreakUp1 = new TaxBreakUp();
-            taxBreakUp1.setAmount(fbdObj.getBigDecimal("YQTax"));
-            taxBreakUp1.setCategory("YQTax");
-            fareBreakDown.setTaxBreakUp(taxBreakUp1);
 
-            TaxBreakUp taxBreakUp2 = new TaxBreakUp();
-            taxBreakUp2.setAmount(fbdObj.getBigDecimal("PGCharge"));
-            taxBreakUp2.setCategory("PGCharge");
-            fareBreakDown.setTaxBreakUp(taxBreakUp2);
-
-            flight.setFareBreakDowns(fareBreakDown);
+           // flight.setFareBreakDowns(fareBreakDown);
         }
 
         flightList.add(flight);
@@ -128,35 +119,32 @@ public abstract class ModelBindingUtil {
     private Fare setFare(JSONObject jsonFare) {
         Fare fare = new Fare();
 
-        fare.setAdditionalTxnFeePub(jsonFare.getBigDecimal("AdditionalTxnFeePub"));
-        fare.setTotalBaggageCharges(jsonFare.getBigDecimal("TotalBaggageCharges"));
-        fare.setDiscount(jsonFare.getBigDecimal("Discount"));
-        fare.setTotalSeatCharges(jsonFare.getBigDecimal("TotalSeatCharges"));
-        fare.setTdsOnIncentive(jsonFare.getBigDecimal("TdsOnIncentive"));
-        fare.setBaseFare(jsonFare.getBigDecimal("BaseFare"));
-        fare.setCommissionEarned(jsonFare.getBigDecimal("CommissionEarned"));
-        fare.setTotalTaxes(jsonFare.getBigDecimal("Tax"));
-        fare.setIncentiveEarned(jsonFare.getBigDecimal("IncentiveEarned"));
-        fare.setServiceFee(jsonFare.getBigDecimal("ServiceFee"));
-        fare.setAdditionalTxnFeeOfrd(jsonFare.getBigDecimal("AdditionalTxnFeeOfrd"));
-        fare.setTotalMealCharges(jsonFare.getBigDecimal("TotalMealCharges"));
+        //fare.setAdditionalTxnFeePub(jsonFare.getBigDecimal("AdditionalTxnFeePub"));
+        //fare.setTotalBaggageCharges(jsonFare.getBigDecimal("TotalBaggageCharges"));
+        //fare.setDiscount(jsonFare.getBigDecimal("Discount"));
+        //fare.setTotalSeatCharges(jsonFare.getBigDecimal("TotalSeatCharges"));
+        //fare.setTdsOnIncentive(jsonFare.getBigDecimal("TdsOnIncentive"));
+        //fare.setBaseFare(jsonFare.getBigDecimal("BaseFare"));
+        //fare.setCommissionEarned(jsonFare.getBigDecimal("CommissionEarned"));
+        //fare.setTotalTaxes(jsonFare.getBigDecimal("Tax"));
+        //fare.setIncentiveEarned(jsonFare.getBigDecimal("IncentiveEarned"));
+        //fare.setServiceFee(jsonFare.getBigDecimal("ServiceFee"));
+        //fare.setAdditionalTxnFeeOfrd(jsonFare.getBigDecimal("AdditionalTxnFeeOfrd"));
+        //fare.setTotalMealCharges(jsonFare.getBigDecimal("TotalMealCharges"));
         fare.setCurrency(jsonFare.getString("Currency"));
-        fare.setTotalSpecialServiceCharges(jsonFare.getBigDecimal("TotalSpecialServiceCharges"));
-        fare.setOfferedFare(jsonFare.getBigDecimal("OfferedFare"));
-        fare.setTdsOnCommission(jsonFare.getBigDecimal("TdsOnCommission"));
-        fare.setOtherCharges(jsonFare.getBigDecimal("OtherCharges"));
-        fare.setPublishedFare(jsonFare.getBigDecimal("PublishedFare"));
-        fare.setYQTax(jsonFare.getBigDecimal("YQTax"));
-        fare.setPGCharge(jsonFare.getBigDecimal("PGCharge"));
-        fare.setPGCharge(jsonFare.getBigDecimal("PLBEarned"));
-        fare.setTdsOnPLB(jsonFare.getBigDecimal("TdsOnPLB"));
+        //fare.setTotalSpecialServiceCharges(jsonFare.getBigDecimal("TotalSpecialServiceCharges"));
+        //fare.setOfferedFare(jsonFare.getBigDecimal("OfferedFare"));
+        //fare.setTdsOnCommission(jsonFare.getBigDecimal("TdsOnCommission"));
+        //fare.setOtherCharges(jsonFare.getBigDecimal("OtherCharges"));
+        //fare.setPublishedFare(jsonFare.getBigDecimal("PublishedFare"));
+       //fare.setYQTax(jsonFare.getBigDecimal("YQTax"));
+        //fare.setPGCharge(jsonFare.getBigDecimal("PGCharge"));
+        //fare.setPGCharge(jsonFare.getBigDecimal("PLBEarned"));
+        //fare.setTdsOnPLB(jsonFare.getBigDecimal("TdsOnPLB"));
 
         JSONArray jsonTaxBreakup = jsonFare.getJSONArray("TaxBreakup");
         for (int tx = 0; tx < jsonTaxBreakup.length(); tx++) {
-            TaxBreakUp taxBreakUp = new TaxBreakUp();
-            taxBreakUp.setAmount(jsonTaxBreakup.getJSONObject(tx).getBigDecimal("value"));
-            taxBreakUp.setCategory(jsonTaxBreakup.getJSONObject(tx).getString("key"));
-            fare.setTaxBreakUp(taxBreakUp);
+
         }
         return fare;
     }
