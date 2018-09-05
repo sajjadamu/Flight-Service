@@ -15,13 +15,13 @@ public class Segment {
 
     private String equipment; // craft in TBO
 
-    private boolean isETicketEligible; // In Galileo (eTicketAbility), In TBO (isETicketEligible)
+    private boolean isETicketEligible = false; // In Galileo (eTicketAbility), In TBO (isETicketEligible)
 
-    private String duration; //In TBO (Duration & AccumulatedDuration) In Galileo(flightTime)
+    private Integer duration; //In TBO (Duration & AccumulatedDuration) In Galileo(flightTime)
 
     private String remark; //In TBO (Remark)
 
-    private String segmentIndicator; // In TBO
+    private Integer segmentIndicator; // In TBO
 
     private int noOfSeatAvailable;// In TBO (NoOfSeatAvailable)
 
@@ -87,11 +87,11 @@ public class Segment {
         this.isETicketEligible = isETicketEligible;
     }
 
-    public String getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 
@@ -103,11 +103,11 @@ public class Segment {
         this.remark = remark;
     }
 
-    public String getSegmentIndicator() {
+    public Integer getSegmentIndicator() {
         return segmentIndicator;
     }
 
-    public void setSegmentIndicator(String segmentIndicator) {
+    public void setSegmentIndicator(Integer segmentIndicator) {
         this.segmentIndicator = segmentIndicator;
     }
 

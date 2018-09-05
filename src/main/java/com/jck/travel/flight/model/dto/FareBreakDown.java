@@ -1,27 +1,24 @@
 package com.jck.travel.flight.model.dto;
 
-
-import com.jck.travel.flight.util.enumeration.PaxType;
-
 public class FareBreakDown {
 
     private String id;
 
-    private String totalFare;
+    private boolean isRefundable;
+
+    private Double totalFare;
 
     private Double baseFare; // Same for TBO, Galileo
 
     private Double totalTax; //For TBO
 
-    private String yqTax;
+    private Double yqTax;
 
-    private Double gstAmount;
+    private String passengerType;
 
-    private PaxType passengerType;
+    private Double reschedulePenalty; // In Galileo(), In TBO
 
-    private String reschedulePenalty; // In Galileo(), In TBO
-
-    private String cancelPenalty; // For Galileo
+    private Double cancelPenalty; // For Galileo
 
     private String currency;
 
@@ -37,11 +34,11 @@ public class FareBreakDown {
         this.id = id;
     }
 
-    public String getTotalFare() {
+    public Double getTotalFare() {
         return totalFare;
     }
 
-    public void setTotalFare(String totalFare) {
+    public void setTotalFare(Double totalFare) {
         this.totalFare = totalFare;
     }
 
@@ -61,43 +58,35 @@ public class FareBreakDown {
         this.totalTax = totalTax;
     }
 
-    public String getYqTax() {
+    public Double getYqTax() {
         return yqTax;
     }
 
-    public void setYqTax(String yqTax) {
+    public void setYqTax(Double yqTax) {
         this.yqTax = yqTax;
     }
 
-    public Double getGstAmount() {
-        return gstAmount;
-    }
-
-    public void setGstAmount(Double gstAmount) {
-        this.gstAmount = gstAmount;
-    }
-
-    public PaxType getPassengerType() {
+    public String getPassengerType() {
         return passengerType;
     }
 
-    public void setPassengerType(PaxType passengerType) {
+    public void setPassengerType(String passengerType) {
         this.passengerType = passengerType;
     }
 
-    public String getReschedulePenalty() {
+    public Double getReschedulePenalty() {
         return reschedulePenalty;
     }
 
-    public void setReschedulePenalty(String reschedulePenalty) {
+    public void setReschedulePenalty(Double reschedulePenalty) {
         this.reschedulePenalty = reschedulePenalty;
     }
 
-    public String getCancelPenalty() {
+    public Double getCancelPenalty() {
         return cancelPenalty;
     }
 
-    public void setCancelPenalty(String cancelPenalty) {
+    public void setCancelPenalty(Double cancelPenalty) {
         this.cancelPenalty = cancelPenalty;
     }
 

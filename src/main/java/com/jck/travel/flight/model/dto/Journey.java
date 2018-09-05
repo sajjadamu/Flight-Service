@@ -30,7 +30,7 @@ public class Journey implements Sortable<Flight>, Searchable<Flight> {
     private String destination;
 
     @JsonIgnore
-    private boolean isEnabled;
+    private boolean isEnabled = true;
 
     private boolean isGSTMandatory;
 
@@ -149,8 +149,9 @@ public class Journey implements Sortable<Flight>, Searchable<Flight> {
         return segments;
     }
 
-    public void setSegments(List<List<Segment>> segments) {
-        this.segments = segments;
+    public void setSegments(List<Segment> segment) {
+        if (segment != null && !segment.isEmpty())
+            this.segments.add(segment);
     }
 
     public Fare getFare() {
@@ -173,8 +174,9 @@ public class Journey implements Sortable<Flight>, Searchable<Flight> {
         return fareBreakDowns;
     }
 
-    public void setFareBreakDowns(List<FareBreakDown> fareBreakDowns) {
-        this.fareBreakDowns = fareBreakDowns;
+    public void setFareBreakDowns(FareBreakDown fareBreakDown) {
+        if (fareBreakDown != null)
+            this.fareBreakDowns.add(fareBreakDown);
     }
 
     @Override
@@ -191,5 +193,4 @@ public class Journey implements Sortable<Flight>, Searchable<Flight> {
     public boolean equals(Object object) {
         return false;
     }
-
 }
